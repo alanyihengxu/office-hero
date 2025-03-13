@@ -2,7 +2,7 @@
 # Version: 0.2
 
 # who did what:
-1. 
+1. Alan Xu: Buttons, Page Navigation, Constants class
 2. 
 3. 
 3. 
