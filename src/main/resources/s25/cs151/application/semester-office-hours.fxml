@@ -2,22 +2,56 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.text.Text?>
+
+<?import java.lang.String?>
 <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="s25.cs151.application.OfficeHoursController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
 
-    <!--Select Semester-->
-    <ComboBox />
+    <!-- Back to Home Page Button -->
+    <HBox alignment="CENTER_LEFT" spacing="10.0">
+        <Button text="Back to Home Page" onAction="#onBackToHomeButtonClick"/>
+    </HBox>
 
-    <!--Select Year-->
-    <TextField />
+    <!-- Header for Semester Office Hours -->
+    <Label text="Create Semester Office Hours" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
 
-    <!--Select Days-->
-    <CheckBox />
+    <!-- Select Semester -->
+    <ComboBox fx:id="semesterComboBox" value="Spring">
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+                <String fx:value="Spring"/>
+                <String fx:value="Summer"/>
+                <String fx:value="Fall"/>
+                <String fx:value="Winter"/>
+            </FXCollections>
+        </items>
+    </ComboBox>
 
+    <!-- Select Year -->
+    <TextField fx:id="yearField" promptText="Insert Year"/>
+
+    <!-- Select Days -->
+    <VBox spacing="10.0">
+        <CheckBox text="Monday" fx:id="mondayCheckBox"/>
+        <CheckBox text="Tuesday" fx:id="tuesdayCheckBox"/>
+        <CheckBox text="Wednesday" fx:id="wednesdayCheckBox"/>
+        <CheckBox text="Thursday" fx:id="thursdayCheckBox"/>
+        <CheckBox text="Friday" fx:id="fridayCheckBox"/>
+    </VBox>
+
+    <!-- Submit Button -->
     <Button text="Submit" onAction="#onSubmitButtonClick"/>
+
+    <!-- Footer -->
+    <HBox alignment="CENTER_RIGHT" spacing="10.0">
+        <Label text="Logo Placeholder"/>
+    </HBox>
 </VBox>
