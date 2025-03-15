@@ -13,13 +13,13 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.layout.Background?>
 <VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="s25.cs151.application.MainController" style="-fx-background-color: darkkhaki;">
+      fx:controller="s25.cs151.application.MainController" style="-fx-background-color: khaki;">
     <!-- Main Menu Title -->
     <HBox id="title" alignment="BASELINE_CENTER">
         <padding>
             <Insets top="20.0"/>
         </padding>
-        <HBox id="titleBorder" minWidth="950" minHeight="100" alignment="BASELINE_CENTER" style="-fx-background-color: ;">
+        <HBox id="titleBorder" minWidth="950" minHeight="100" alignment="BASELINE_CENTER" style="-fx-background-color: darkkhahi;">
             <padding>
                 <Insets top="20.0"/>
             </padding>
@@ -47,7 +47,7 @@
                 <Insets right="40" left="52"/>
             </padding>
             <ImageView fitHeight="50" fitWidth="50">
-                <Image url="OfficeHoursIcon.png"/>
+                <Image url="@OfficeHoursIcon.png"/>
             </ImageView>
         </HBox>
         <HBox id="icon2">
@@ -55,7 +55,7 @@
                 <Insets left="108"/>
             </padding>
             <ImageView fitHeight="50" fitWidth="50">
-                <Image url="clock.png"/>
+                <Image url="@clock.png"/>
             </ImageView>
         </HBox>
         <HBox id="icon3">
@@ -63,7 +63,7 @@
                 <Insets left="155"/>
             </padding>
             <ImageView fitHeight="50" fitWidth="50">
-                <Image url="document.png"/>
+            <Image url="@document.png"/>
             </ImageView>
         </HBox>
         <HBox id="icon4">
@@ -71,7 +71,7 @@
                 <Insets left="165"/>
             </padding>
             <ImageView fitHeight="50" fitWidth="50">
-                <Image url="calendar.png"/>
+            <Image url="@calendar.png"/>
             </ImageView>
         </HBox>
         <HBox id="icon5">
@@ -79,7 +79,7 @@
                 <Insets left="157"/>
             </padding>
             <ImageView fitHeight="45" fitWidth="45">
-                <Image url="edit.png"/>
+            <Image url="@edit.png"/>
             </ImageView>
         </HBox>
         <!-- DONE WITH ICONS NOW -->
@@ -128,7 +128,7 @@
                 </font>
             </Label>
             <ImageView fitHeight="150" fitWidth="150">
-                <Image url="OfficeManagerLogo.png"/>
+            <Image url="@OfficeManagerLogo.png"/>
             </ImageView>
         </VBox>
     </HBox>
