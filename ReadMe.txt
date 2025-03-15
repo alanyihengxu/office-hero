@@ -1,8 +1,8 @@
-# Name of application: 
+# Name of application: Office Hero
 # Version: 0.2
 
 # who did what:
-1. Alan Xu: Buttons, Page Navigation, Constants class
+1.
 2. 
 3. 
 3. 

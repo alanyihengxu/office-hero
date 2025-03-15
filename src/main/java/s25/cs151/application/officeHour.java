@@ -16,10 +16,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.nio.file.DirectoryNotEmptyException;
-import java.util.Stack;
+import java.time.LocalDate;
 
-public class Main extends Application {
+public class officeHour extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         Pane root = new Pane();
@@ -112,6 +111,7 @@ public class Main extends Application {
         friday.setLayoutX(250);
         friday.setLayoutY(520);
 
+        //Image
         Image calendar = new Image("calendar1.png");
         ImageView imageView = new ImageView(calendar);
         imageView.setLayoutX(500);
@@ -131,9 +131,69 @@ public class Main extends Application {
         logoText.setLayoutX(730);
         logoText.setLayoutY(370);
 
-        Button submit = new Button("Submit");
-        submit.setLayoutX(250);
-        submit.setLayoutY(570);
+        //Submit button
+        Button submitButton = new Button("Submit");
+        submitButton.setLayoutX(250);
+        submitButton.setLayoutY(570);
+
+        //Submit button in action + checks for valid inputs
+        submitButton.setOnAction(e->{
+            boolean isValid = true;
+            String errorMessage = "";
+
+            if (semester.getValue() == null) {
+                isValid = false;
+                errorMessage += "Please select a semester.\n";
+            }
+
+            if (!(monday.isSelected() || tuesday.isSelected() ||
+                    wednesday.isSelected() || thursday.isSelected() ||
+                    friday.isSelected())) {
+                isValid = false;
+                errorMessage += "Please select at least one day.\n";
+            }
+
+            String yearInput = year.getText();
+            boolean allDigits = true;
+            for (int i = 0; i < yearInput.length(); i++) {
+                if (!Character.isDigit(yearInput.charAt(i))) {
+                    allDigits = false;
+                    break;
+                }
+            }
+
+            if (yearInput.length() != 4 || !allDigits) {
+                isValid = false;
+                errorMessage += "Please enter a valid year input of 4 digits\n";
+            } else {
+
+                int years = Integer.parseInt(yearInput);
+                int currentYear = LocalDate.now().getYear();
+                if (years < currentYear) {
+                    isValid = false;
+                    errorMessage += "You can't time travel buddy\n";
+                }
+            }
+
+            if (isValid) {
+                MainPage mainPage = new MainPage();
+                mainPage.start(stage);
+            } else {
+                System.out.println(errorMessage);
+            }
+
+        });
+
+
+        //Back to home page button
+        Button backButton = new Button("Back to Home Page");
+        backButton.setLayoutX(30);
+        backButton.setLayoutY(30);
+
+        backButton.setOnAction(e -> {
+            MainPage mainPage = new MainPage();
+            mainPage.start(stage);
+        });
 
         //adding all the visual elements to the pane
         root.getChildren().add(stackPane);
@@ -149,7 +209,8 @@ public class Main extends Application {
         root.getChildren().add(imageView);
         root.getChildren().add(imageView1);
         root.getChildren().add(logoText);
-        root.getChildren().add(submit);
+        root.getChildren().add(submitButton);
+        root.getChildren().add(backButton);
 
         Scene scene = new Scene(root, 1000, 600);
         stage.setScene(scene);
