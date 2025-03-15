@@ -3,7 +3,7 @@
 
 # who did what:
 1. Alan Xu: Buttons, Page Navigation, Constants class
-2. 
+2. Minh Tran: Office Hours Page Controller
 3. 
 3. 
 
