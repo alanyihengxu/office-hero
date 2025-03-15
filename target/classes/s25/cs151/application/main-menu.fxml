@@ -27,19 +27,19 @@
 
     <HBox style="-fx-background-color: khaki;">
         <ImageView fitHeight="50" fitWidth="50">
-            <Image url="OfficeHoursIcon.png" />
+            <Image url="../../../OfficeHoursIcon.png" />
         </ImageView>
         <ImageView fitHeight="50" fitWidth="50">
-            <Image url="clock.png" />
+            <Image url="../../../clock.png" />
         </ImageView>
         <ImageView fitHeight="50" fitWidth="50">
-            <Image url="document.png" />
+            <Image url="../../../document.png" />
         </ImageView>
         <ImageView fitHeight="50" fitWidth="50">
-            <Image url="calendar.png" />
+            <Image url="../../../calendar.png" />
         </ImageView>
         <ImageView fitHeight="45" fitWidth="45">
-            <Image url="edit.png" />
+            <Image url="../../../edit.png" />
         </ImageView>
     </HBox>
 
@@ -71,7 +71,7 @@
             <Label text="Office" style="-fx-font-size: 25px; -fx-font-family: Arial;" />
             <Label text="Hero" style="-fx-font-size: 25px; -fx-font-family: Arial;" />
             <ImageView fitHeight="150" fitWidth="150">
-                <Image url="OfficeManagerLogo.png" />
+                <Image url="../../../OfficeManagerLogo.png" />
             </ImageView>
         </VBox>
     </HBox>
