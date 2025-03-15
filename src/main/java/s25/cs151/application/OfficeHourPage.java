@@ -18,7 +18,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.LocalDate;
 
-public class officeHour extends Application {
+public class OfficeHourPage extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         Pane root = new Pane();
@@ -176,8 +176,12 @@ public class officeHour extends Application {
             }
 
             if (isValid) {
-                MainPage mainPage = new MainPage();
-                mainPage.start(stage);
+                MainMenuPage mainPage = new MainMenuPage();
+                try {
+                    mainPage.start(stage);  // Switch to NewScene
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             } else {
                 System.out.println(errorMessage);
             }
@@ -191,8 +195,12 @@ public class officeHour extends Application {
         backButton.setLayoutY(30);
 
         backButton.setOnAction(e -> {
-            MainPage mainPage = new MainPage();
-            mainPage.start(stage);
+            MainMenuPage mainPage = new MainMenuPage();
+            try {
+                mainPage.start(stage);  // Switch to NewScene
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         });
 
         //adding all the visual elements to the pane
@@ -212,13 +220,9 @@ public class officeHour extends Application {
         root.getChildren().add(submitButton);
         root.getChildren().add(backButton);
 
-        Scene scene = new Scene(root, 1000, 600);
+        Scene scene = new Scene(root, Constants.WIDTH, Constants.HEIGHT);
         stage.setScene(scene);
         stage.setTitle("Office-hero");
         stage.show();
-    }
-
-    public static void main(String[] args) {
-        launch();
     }
 }
