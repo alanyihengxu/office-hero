@@ -1,12 +1,12 @@
 package s25.cs151.application;
 
-import javafx.application.Application;
 import javafx.scene.layout.Pane;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,9 +18,18 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.LocalDate;
 
-public class OfficeHourPage extends Application {
-    @Override
-    public void start(Stage stage) throws IOException {
+public class OfficeHourPage {
+
+    // Method to show an alert box
+    private static void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    public static void setActive(Stage stage) throws IOException {
         Pane root = new Pane();
         StackPane stackPane = new StackPane();
         StackPane stackPane2 = new StackPane();
@@ -136,8 +145,30 @@ public class OfficeHourPage extends Application {
         submitButton.setLayoutX(250);
         submitButton.setLayoutY(570);
 
+        //Back to home page button
+        Button backButton = new Button("Back to Home Page");
+        backButton.setLayoutX(30);
+        backButton.setLayoutY(30);
+
+        //adding all the visual elements to the pane
+        root.getChildren().add(stackPane);
+        root.getChildren().add(stackPane2);
+        root.getChildren().add(stackPane3);
+        root.getChildren().add(year);
+        root.getChildren().add(semester);
+        root.getChildren().add(monday);
+        root.getChildren().add(tuesday);
+        root.getChildren().add(wednesday);
+        root.getChildren().add(thursday);
+        root.getChildren().add(friday);
+        root.getChildren().add(imageView);
+        root.getChildren().add(imageView1);
+        root.getChildren().add(logoText);
+        root.getChildren().add(submitButton);
+        root.getChildren().add(backButton);
+
         //Submit button in action + checks for valid inputs
-        submitButton.setOnAction(e->{
+        submitButton.setOnAction(_->{
             boolean isValid = true;
             String errorMessage = "";
 
@@ -164,65 +195,39 @@ public class OfficeHourPage extends Application {
 
             if (yearInput.length() != 4 || !allDigits) {
                 isValid = false;
-                errorMessage += "Please enter a valid year input of 4 digits\n";
+                errorMessage += "Please enter a valid year input of 4 digits.\n";
             } else {
 
                 int years = Integer.parseInt(yearInput);
                 int currentYear = LocalDate.now().getYear();
                 if (years < currentYear) {
                     isValid = false;
-                    errorMessage += "You can't time travel buddy\n";
+                    errorMessage += "Please enter a current or future 4-digit year.\n";
                 }
             }
 
             if (isValid) {
-                MainMenuPage mainPage = new MainMenuPage();
                 try {
-                    mainPage.start(stage);  // Switch to NewScene
+                    MainMenuPage.setActive(stage);  // Switch to NewScene
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
             } else {
-                System.out.println(errorMessage);
+                String alertTitle = "Error";
+                showAlert(alertTitle, errorMessage);
             }
 
         });
 
-
-        //Back to home page button
-        Button backButton = new Button("Back to Home Page");
-        backButton.setLayoutX(30);
-        backButton.setLayoutY(30);
-
-        backButton.setOnAction(e -> {
-            MainMenuPage mainPage = new MainMenuPage();
+        backButton.setOnAction(_ -> {
             try {
-                mainPage.start(stage);  // Switch to NewScene
+                MainMenuPage.setActive(stage);  // Switch to NewScene
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
         });
 
-        //adding all the visual elements to the pane
-        root.getChildren().add(stackPane);
-        root.getChildren().add(stackPane2);
-        root.getChildren().add(stackPane3);
-        root.getChildren().add(year);
-        root.getChildren().add(semester);
-        root.getChildren().add(monday);
-        root.getChildren().add(tuesday);
-        root.getChildren().add(wednesday);
-        root.getChildren().add(thursday);
-        root.getChildren().add(friday);
-        root.getChildren().add(imageView);
-        root.getChildren().add(imageView1);
-        root.getChildren().add(logoText);
-        root.getChildren().add(submitButton);
-        root.getChildren().add(backButton);
-
-        Scene scene = new Scene(root, Constants.WIDTH, Constants.HEIGHT);
+        Scene scene = new Scene(root, 1000, 600);
         stage.setScene(scene);
-        stage.setTitle("Office-hero");
-        stage.show();
     }
 }

@@ -10,8 +10,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        MainMenuPage mainMenu = new MainMenuPage();
-        mainMenu.start(stage);
+        stage.setTitle("Office Hero - Welcome!");
+        MainMenuPage.setActive(stage);
+        stage.show();
     }
 
     public static void main(String[] args) {

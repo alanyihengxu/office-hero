@@ -1,6 +1,5 @@
 package s25.cs151.application;
 
-import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -20,10 +19,9 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 
-public class MainMenuPage extends Application {
+public class MainMenuPage {
 
-    @Override
-    public void start(Stage stage) throws IOException {
+    public static void setActive(Stage stage) throws IOException {
         //Main Menu Title
         Label mainMenu = new Label("Main Menu");
         mainMenu.setFont(new Font( 64));
@@ -45,10 +43,9 @@ public class MainMenuPage extends Application {
         Button stackBt6 = new Button("Search Appointments");
         Button stackBt7 = new Button("Daily Report (PDF)");
 
-        bt1.setOnAction(e-> {
-            OfficeHourPage newScene = new OfficeHourPage();
+        bt1.setOnAction(_-> {
             try {
-                newScene.start(stage);  // Switch to NewScene
+                OfficeHourPage.setActive(stage);  // Switch to NewScene
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -175,13 +172,11 @@ public class MainMenuPage extends Application {
         VBox root = new VBox();
         root.getChildren().addAll(title, Buttons, allIcons, lastBox);
 
-        Scene scene = new Scene(root, Constants.WIDTH,Constants.HEIGHT);
+        Scene scene = new Scene(root, 1000,600);
         stage.setScene(scene);
-        stage.setTitle("Office Hero - Welcome!");
 
 
         Image iconA = new Image("OfficeManagerLogo.png");
         stage.getIcons().add(iconA);
-        stage.show();
     }
 }
