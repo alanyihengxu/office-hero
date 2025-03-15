@@ -9,23 +9,21 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.control.Label?>
 <VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="s25.cs151.application.MainController" spacing="10">
-    <HBox alignment="BASELINE_CENTER" minWidth="950" minHeight="100">
-        <Label text="Main Menu" style="-fx-font-size: 64px;" />
+      fx:controller="s25.cs151.application.MainController" spacing="10" style="-fx-background-color: khaki;" >
+    <HBox alignment="BASELINE_CENTER" minWidth="950" minHeight="120" style="-fx-padding: 30 0 0 0;">
+        <Label text="Main Menu" style="-fx-font-size: 64px; -fx-font-weight: bold; -fx-background-color: darkkhaki;"
+               prefWidth="1000" prefHeight="220" alignment="CENTER"/>
     </HBox>
 
-    <HBox spacing="120" style="-fx-background-color: khaki;">
-        <padding>
-            <Insets bottom="150" left="40" right="20" top="40"/>
-        </padding>
-        <Button text="Office Hours" onAction="#onOfficeHoursButtonClick"/>
-        <Button text="New Hours" onAction="#onNewHoursButtonClick"/>
-        <Button text="New Course" onAction="#onNewCourseButtonClick"/>
-        <Button text="New Appointment" onAction="#onNewAppointmentButtonClick"/>
-        <Button text="Update" onAction="#onUpdateButtonClick"/>
+    <HBox spacing="120" alignment="CENTER" style="-fx-padding: 100 0 0 0;">
+        <Button text="Office Hours" onAction="#onOfficeHoursButtonClick" prefWidth="120"/>
+        <Button text="New Hours" onAction="#onNewHoursButtonClick" prefWidth="120"/>
+        <Button text="New Course" onAction="#onNewCourseButtonClick" prefWidth="120"/>
+        <Button text="New Appointment" onAction="#onNewAppointmentButtonClick" prefWidth="120"/>
+        <Button text="Update" onAction="#onUpdateButtonClick" prefWidth="120"/>
     </HBox>
 
-    <HBox style="-fx-background-color: khaki;">
+    <HBox spacing="191" alignment="TOP_CENTER">
         <ImageView fitHeight="50" fitWidth="50">
             <Image url="OfficeHoursIcon.png" />
         </ImageView>
@@ -43,36 +41,23 @@
         </ImageView>
     </HBox>
 
-    <HBox maxWidth="1000" style="-fx-background-color: khaki;">
-        <VBox style="-fx-background-color: khaki;">
-            <padding>
-                <Insets bottom="50" left="40" right="80" top="40"/>
-            </padding>
-            <!-- DatePicker will be added via controller -->
-        </VBox>
-        <VBox style="-fx-background-color: khaki;">
-            <padding>
-                <Insets bottom="100" left="40" right="100" top="150"/>
-            </padding>
-            <HBox>
-                <padding>
-                    <Insets left="40" right="50"/>
-                </padding>
-                <Button text="Search Appointments" />
-            </HBox>
-            <HBox>
-                <Button text="Daily Report (PDF)" />
-            </HBox>
-        </VBox>
+        <!-- DatePicker will be added via controller -->
+    <VBox spacing="90" alignment="CENTER" style="-fx-padding: 100 0 0 0;">
+        <Button text="Search Appointments" prefWidth="130"/>
+        <Button text="Daily Report (PDF)" prefWidth="130"/>
+    </VBox>
+
+    <HBox alignment="BASELINE_RIGHT">
         <VBox>
-            <padding>
-                <Insets bottom="20" top="100"/>
-            </padding>
-            <Label text="Office" style="-fx-font-size: 25px; -fx-font-family: Arial;" />
-            <Label text="Hero" style="-fx-font-size: 25px; -fx-font-family: Arial;" />
-            <ImageView fitHeight="150" fitWidth="150">
+            <!-- Datepicker here -->
+        </VBox>
+        <VBox style="-fx-padding: 0 30 0 0;">
+            <Label text="Office" style="-fx-font-size: 25px; -fx-font-family: Arial;"/>
+            <Label text="Hero" style="-fx-font-size: 25px; -fx-font-family: Arial; -fx-padding: -5 0 0 25;"/>
+            <ImageView fitHeight="75" fitWidth="75">
                 <Image url="OfficeManagerLogo.png" />
             </ImageView>
         </VBox>
     </HBox>
+
 </VBox>

@@ -2,56 +2,68 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.collections.FXCollections?>
-<?import javafx.scene.text.Text?>
-
 <?import java.lang.String?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="s25.cs151.application.OfficeHoursController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
+
+<VBox alignment="TOP_CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml" fx:controller="s25.cs151.application.OfficeHoursController"
+      style="-fx-background-color: khaki; -fx-padding: 20 20 20 20;">
 
     <!-- Back to Home Page Button -->
-    <HBox alignment="CENTER_LEFT" spacing="10.0">
+    <HBox alignment="CENTER_LEFT" style="-fx-font-size: 16;">
         <Button text="Back to Home Page" onAction="#onBackToHomeButtonClick"/>
     </HBox>
 
     <!-- Header for Semester Office Hours -->
-    <Label text="Create Semester Office Hours" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+    <Label alignment="CENTER" text="Create Semester Office Hours" style="-fx-font-size: 32px; -fx-font-weight: bold;
+        -fx-background-color: darkkhaki" prefWidth="1000"/>
 
     <!-- Select Semester -->
-    <ComboBox fx:id="semesterComboBox" value="Spring">
-        <items>
-            <FXCollections fx:factory="observableArrayList">
-                <String fx:value="Spring"/>
-                <String fx:value="Summer"/>
-                <String fx:value="Fall"/>
-                <String fx:value="Winter"/>
-            </FXCollections>
-        </items>
-    </ComboBox>
+    <HBox style="-fx-padding: 50 0 0 0;" spacing="200">
+       <Label text="Select Semester: " style="-fx-font-size: 16;"/>
+        <ComboBox fx:id="semesterComboBox" value="Spring">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Spring"/>
+                    <String fx:value="Summer"/>
+                    <String fx:value="Fall"/>
+                    <String fx:value="Winter"/>
+                </FXCollections>
+            </items>
+        </ComboBox>
+    </HBox>
+
 
     <!-- Select Year -->
-    <TextField fx:id="yearField" promptText="Insert Year"/>
+    <HBox style="-fx-padding: 50 0 0 0;" spacing="235">
+        <Label text="Select Year: " style="-fx-font-size: 16;" />
+        <TextField fx:id="yearField" promptText="Insert Year" maxWidth="100" alignment="CENTER"/>
+    </HBox>
 
     <!-- Select Days -->
-    <VBox spacing="10.0">
-        <CheckBox text="Monday" fx:id="mondayCheckBox"/>
-        <CheckBox text="Tuesday" fx:id="tuesdayCheckBox"/>
-        <CheckBox text="Wednesday" fx:id="wednesdayCheckBox"/>
-        <CheckBox text="Thursday" fx:id="thursdayCheckBox"/>
-        <CheckBox text="Friday" fx:id="fridayCheckBox"/>
-    </VBox>
+    <HBox style="-fx-padding: 50 0 0 0;" spacing="166">
+        <Label text="Select Available Days: " style="-fx-font-size: 16;" />
+        <VBox spacing="10.0">
+            <CheckBox text="Monday" fx:id="mondayCheckBox"/>
+            <CheckBox text="Tuesday" fx:id="tuesdayCheckBox"/>
+            <CheckBox text="Wednesday" fx:id="wednesdayCheckBox"/>
+            <CheckBox text="Thursday" fx:id="thursdayCheckBox"/>
+            <CheckBox text="Friday" fx:id="fridayCheckBox"/>
+        </VBox>
+    </HBox>
 
     <!-- Submit Button -->
-    <Button text="Submit" onAction="#onSubmitButtonClick"/>
+    <Button text="Submit" onAction="#onSubmitButtonClick" style="-fx-font-size: 20; -fx-font-weight: bold;" />
 
-    <!-- Footer -->
-    <HBox alignment="CENTER_RIGHT" spacing="10.0">
-        <Label text="Logo Placeholder"/>
+    <!-- Logo -->
+    <HBox alignment="BASELINE_RIGHT">
+        <VBox style="-fx-padding: -15 0 0 0;">
+            <Label text="Office" style="-fx-font-size: 25px; -fx-font-family: Arial;"/>
+            <Label text="Hero" style="-fx-font-size: 25px; -fx-font-family: Arial; -fx-padding: -5 0 0 25;"/>
+            <ImageView fitHeight="75" fitWidth="75">
+                <Image url="OfficeManagerLogo.png" />
+            </ImageView>
+        </VBox>
     </HBox>
 </VBox>
