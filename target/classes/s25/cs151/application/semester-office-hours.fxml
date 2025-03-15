@@ -16,24 +16,16 @@
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
 
-    <Rectangle width="1000" height="600" fill="KHAKI" />
-    <Rectangle width="220" height="600" />
-
-    <!-- Header for Semester Office Hours -->
-    <Text text="Create Semester Office Hours" style="-fx-font-size: 48px; -fx-font-weight: bold; -fx-text-fill: black;" layoutX="250" layoutY="60" />
-
     <!-- Back to Home Page Button -->
     <HBox alignment="CENTER_LEFT" spacing="10.0">
         <Button text="Back to Home Page" onAction="#onBackToHomeButtonClick"/>
     </HBox>
 
-    <StackPane layoutX="15" layoutY="120">
-        <Rectangle width="190" height="50" fill="ALICEBLUE" />
-        <Text text="Select the current semester:" style="-fx-font-size: 16px;" />
-    </StackPane>
+    <!-- Header for Semester Office Hours -->
+    <Label text="Create Semester Office Hours" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
 
     <!-- Select Semester -->
-    <ComboBox fx:id="semesterComboBox" value="Spring" layoutX="250" layoutY="130">
+    <ComboBox fx:id="semesterComboBox" value="Spring">
         <items>
             <FXCollections fx:factory="observableArrayList">
                 <String fx:value="Spring"/>
@@ -44,26 +36,16 @@
         </items>
     </ComboBox>
 
-    <StackPane layoutX="15" layoutY="270">
-        <Rectangle width="190" height="50"/>
-        <Text text="Enter the current year:" style="-fx-font-size: 16px;" />
-    </StackPane>
-
-    <!-- Select Year -->
-    <TextField fx:id="yearField" promptText="Insert Year" layoutX="250" layoutY="280" style="-fx-padding: 10px; -fx-font-size: 16px;" focusTraversable="false"/>
-
-    <StackPane layoutX="15" layoutY="400">
-        <Rectangle width="190" height="50"/>
-        <Text text="Select the days available:" style="-fx-font-size: 16px;" />
-    </StackPane>
+    <TextField fx:id="yearField" promptText="Insert Year"/>
 
     <!-- Select Days -->
+
     <VBox spacing="10.0">
-        <CheckBox text="Monday" fx:id="mondayCheckBox" layoutX="250" layoutY="400"/>
-        <CheckBox text="Tuesday" fx:id="tuesdayCheckBox" layoutX="250" layoutY="430"/>
-        <CheckBox text="Wednesday" fx:id="wednesdayCheckBox" layoutX="250" layoutY="460"/>
-        <CheckBox text="Thursday" fx:id="thursdayCheckBox" layoutX="250" layoutY="490"/>
-        <CheckBox text="Friday" fx:id="fridayCheckBox" layoutX="250" layoutY="520"/>
+        <CheckBox text="Monday" fx:id="mondayCheckBox"/>
+        <CheckBox text="Tuesday" fx:id="tuesdayCheckBox"/>
+        <CheckBox text="Wednesday" fx:id="wednesdayCheckBox"/>
+        <CheckBox text="Thursday" fx:id="thursdayCheckBox"/>
+        <CheckBox text="Friday" fx:id="fridayCheckBox"/>
     </VBox>
 
     <!--
@@ -77,10 +59,9 @@
         <Image url="logo.png" />
     </ImageView>
     -->
-    <Text text="Office Hero" style="-fx-font-size: 36px; -fx-font-style: italic;" layoutX="730" layoutY="370" />
 
     <!-- Submit Button -->
-    <Button text="Submit" onAction="#onSubmitButtonClick" layoutX="250" layoutY="570"/>
+    <Button text="Submit" onAction="#onSubmitButtonClick"/>
 
     <!-- Footer -->
     <HBox alignment="CENTER_RIGHT" spacing="10.0">

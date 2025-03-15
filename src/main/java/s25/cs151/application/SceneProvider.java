@@ -66,7 +66,7 @@ public class SceneProvider {
         allIcons.setBackground(new Background(new BackgroundFill(Color.KHAKI,null,null)));
 
         HBox icon1 = new HBox();
-        Image book = new Image("OfficeHoursIcon.png");
+        Image book = new Image("s25/cs151/application/OfficeHoursIcon.png");
         ImageView imageView1 = new ImageView(book);
         imageView1.setFitHeight(50);
         imageView1.setFitWidth(50);
@@ -74,7 +74,7 @@ public class SceneProvider {
         icon1.setPadding(new Insets(0,40,0,52));
 
         HBox icon2 = new HBox();
-        Image clock = new Image("clock.png");
+        Image clock = new Image("s25/cs151/application/clock.png");
         ImageView imageView2 = new ImageView(clock);
         imageView2.setFitHeight(50);
         imageView2.setFitWidth(50);
@@ -82,7 +82,7 @@ public class SceneProvider {
         icon2.setPadding(new Insets(0,0,0,108));
 
         HBox icon3 = new HBox();
-        Image doc = new Image("document.png");
+        Image doc = new Image("s25/cs151/application/document.png");
         ImageView imageView3 = new ImageView(doc);
         imageView3.setFitHeight(50);
         imageView3.setFitWidth(50);
@@ -90,7 +90,7 @@ public class SceneProvider {
         icon3.setPadding(new Insets(0,0,0,155));
 
         HBox icon4 = new HBox();
-        Image calendar = new Image("calendar.png");
+        Image calendar = new Image("s25/cs151/application/calendar.png");
         ImageView imageView4 = new ImageView(calendar);
         imageView4.setFitHeight(50);
         imageView4.setFitWidth(50);
@@ -98,7 +98,7 @@ public class SceneProvider {
         icon4.setPadding(new Insets(0,0,0,165));
 
         HBox icon5 = new HBox();
-        Image edit = new Image("edit.png");
+        Image edit = new Image("s25/cs151/application/edit.png");
         ImageView imageView5 = new ImageView(edit);
         imageView5.setFitHeight(45);
         imageView5.setFitWidth(45);
@@ -136,7 +136,7 @@ public class SceneProvider {
         stackedButtons.getChildren().addAll(SButton1,SButton2);
 
         VBox mainlogo = new VBox();
-        Image logo = new Image("OfficeManagerLogo.png");
+        Image logo = new Image("s25/cs151/application/OfficeManagerLogo.png");
         ImageView imageView6 = new ImageView(logo);
         imageView6.setFitHeight(150);
         imageView6.setFitWidth(150);
@@ -247,14 +247,14 @@ public class SceneProvider {
         friday.setLayoutX(250);
         friday.setLayoutY(520);
 
-        Image calendar = new Image("calendar1.png");
+        Image calendar = new Image("s25/cs151/application/calendar1.png");
         ImageView imageView = new ImageView(calendar);
         imageView.setLayoutX(500);
         imageView.setLayoutY(80);
         imageView.setFitWidth(450);
         imageView.setFitHeight(250);
 
-        Image logo = new Image("logo.png");
+        Image logo = new Image("s25/cs151/application/logo.png");
         ImageView imageView1 = new ImageView(logo);
         imageView1.setLayoutX(700);
         imageView1.setLayoutY(380);

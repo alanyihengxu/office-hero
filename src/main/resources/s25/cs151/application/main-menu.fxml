@@ -8,70 +8,127 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.control.Label?>
-<VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="s25.cs151.application.MainController" spacing="10">
-    <HBox alignment="BASELINE_CENTER" minWidth="950" minHeight="100">
-        <Label text="Main Menu" style="-fx-font-size: 64px;" />
-    </HBox>
 
-    <HBox spacing="120" style="-fx-background-color: khaki;">
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.layout.Background?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="s25.cs151.application.MainController" style="-fx-background-color: darkkhaki;">
+    <!-- Main Menu Title -->
+    <HBox id="title" alignment="BASELINE_CENTER">
         <padding>
-            <Insets bottom="150" left="40" right="20" top="40"/>
+            <Insets top="20.0"/>
         </padding>
+        <HBox id="titleBorder" minWidth="950" minHeight="100" alignment="BASELINE_CENTER" style="-fx-background-color: ;">
+            <padding>
+                <Insets top="20.0"/>
+            </padding>
+            <Label text="Main Menu" >
+                <font>
+                    <Font size="64"/>
+                </font>
+            </Label>
+        </HBox>
+    </HBox>
+    <HBox id="buttons" spacing="120">
+        <padding>
+            <Insets top="150" right="40" bottom="20" left="40"/>
+        </padding>
+        <!-- Buttons -->
         <Button text="Office Hours" onAction="#onOfficeHoursButtonClick"/>
         <Button text="New Hours" onAction="#onNewHoursButtonClick"/>
         <Button text="New Course" onAction="#onNewCourseButtonClick"/>
         <Button text="New Appointment" onAction="#onNewAppointmentButtonClick"/>
         <Button text="Update" onAction="#onUpdateButtonClick"/>
     </HBox>
-
-    <HBox style="-fx-background-color: khaki;">
-        <ImageView fitHeight="50" fitWidth="50">
-            <Image url="../../../OfficeHoursIcon.png" />
-        </ImageView>
-        <ImageView fitHeight="50" fitWidth="50">
-            <Image url="../../../clock.png" />
-        </ImageView>
-        <ImageView fitHeight="50" fitWidth="50">
-            <Image url="../../../document.png" />
-        </ImageView>
-        <ImageView fitHeight="50" fitWidth="50">
-            <Image url="../../../calendar.png" />
-        </ImageView>
-        <ImageView fitHeight="45" fitWidth="45">
-            <Image url="../../../edit.png" />
-        </ImageView>
+    <HBox id="allIcons">
+        <HBox id="icon1">
+            <padding>
+                <Insets right="40" left="52"/>
+            </padding>
+            <ImageView fitHeight="50" fitWidth="50">
+                <Image url="OfficeHoursIcon.png"/>
+            </ImageView>
+        </HBox>
+        <HBox id="icon2">
+            <padding>
+                <Insets left="108"/>
+            </padding>
+            <ImageView fitHeight="50" fitWidth="50">
+                <Image url="clock.png"/>
+            </ImageView>
+        </HBox>
+        <HBox id="icon3">
+            <padding>
+                <Insets left="155"/>
+            </padding>
+            <ImageView fitHeight="50" fitWidth="50">
+                <Image url="document.png"/>
+            </ImageView>
+        </HBox>
+        <HBox id="icon4">
+            <padding>
+                <Insets left="165"/>
+            </padding>
+            <ImageView fitHeight="50" fitWidth="50">
+                <Image url="calendar.png"/>
+            </ImageView>
+        </HBox>
+        <HBox id="icon5">
+            <padding>
+                <Insets left="157"/>
+            </padding>
+            <ImageView fitHeight="45" fitWidth="45">
+                <Image url="edit.png"/>
+            </ImageView>
+        </HBox>
+        <!-- DONE WITH ICONS NOW -->
     </HBox>
+    <!-- Last HBox, containing the calendar and two more buttons -->
+    <HBox id="lastBox" maxWidth="1000">
+        <!-- CALENDAR VBOX -->
+        <VBox id="calendarPopUp">
+            <padding>
+                <Insets top="50" right="40" bottom="80" left="40"/>
+            </padding>
 
-    <HBox maxWidth="1000" style="-fx-background-color: khaki;">
-        <VBox style="-fx-background-color: khaki;">
-            <padding>
-                <Insets bottom="50" left="40" right="80" top="40"/>
-            </padding>
-            <!-- DatePicker will be added via controller -->
+            <DatePicker/>
         </VBox>
-        <VBox style="-fx-background-color: khaki;">
+        <!-- TWO BUTTON VBOX -->
+        <VBox id="stackedButtons">
             <padding>
-                <Insets bottom="100" left="40" right="100" top="150"/>
+                <Insets top="100" right="40" bottom="100" left="150"/>
             </padding>
-            <HBox>
+
+            <!-- Buttons for Bottom -->
+            <HBox id="SButton1">
                 <padding>
-                    <Insets left="40" right="50"/>
+                    <Insets right="40" bottom="50"/>
                 </padding>
-                <Button text="Search Appointments" />
+
+                <Button text="Search Appointments"/>
             </HBox>
-            <HBox>
-                <Button text="Daily Report (PDF)" />
+
+            <HBox id="SButton2">
+                <Button text="Daily Report (PDF)"/>
             </HBox>
         </VBox>
-        <VBox>
+        <VBox id="mainlogo">
             <padding>
-                <Insets bottom="20" top="100"/>
+                <Insets top="20" left="100"/>
             </padding>
-            <Label text="Office" style="-fx-font-size: 25px; -fx-font-family: Arial;" />
-            <Label text="Hero" style="-fx-font-size: 25px; -fx-font-family: Arial;" />
+            <Label text="Office" >
+                <font>
+                    <Font name="Arial" size="25"/>
+                </font>
+            </Label>
+            <Label text="           Hero" >
+                <font>
+                    <Font name="Arial" size="25"/>
+                </font>
+            </Label>
             <ImageView fitHeight="150" fitWidth="150">
-                <Image url="../../../OfficeManagerLogo.png" />
+                <Image url="OfficeManagerLogo.png"/>
             </ImageView>
         </VBox>
     </HBox>
