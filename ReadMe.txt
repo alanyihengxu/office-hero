@@ -1,4 +1,4 @@
-# Name of application: 
+# Name of application: Office Hero
 # Version: 0.2
 
 # who did what:
