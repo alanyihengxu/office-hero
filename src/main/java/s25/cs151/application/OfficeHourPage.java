@@ -19,8 +19,14 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 public class OfficeHourPage {
+    /**
+     * This method shows an alert for invalid user input when it comes to
+     * year input in office hour page.
+     * @param: String title, String message
+     * @return: Void
+     *
+     */
 
-    // Method to show an alert box
     private static void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -28,6 +34,17 @@ public class OfficeHourPage {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    /**
+     * This method makes it so a stage that becomes active.
+     * This stage houses the office hour page which allows users to
+     * 1.Select Semester
+     * 2.Enter current year
+     * 3.Select days for office hours
+     * @param: Stage (stage object)
+     * @return: Void
+     *
+     */
 
     public static void setActive(Stage stage) throws IOException {
         Pane root = new Pane();
