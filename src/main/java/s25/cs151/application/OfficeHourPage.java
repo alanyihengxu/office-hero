@@ -17,11 +17,15 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.*;
+import java.io.*;
+
 
 public class OfficeHourPage {
     /**
-     * This method shows an alert for invalid user input when it comes to
-     * year input in office hour page.
+     * This method is a helper method for displaying alerts; the default alert
+     * type is error.
+     *
      * @param: String title, String message
      * @return: Void
      *
@@ -29,10 +33,60 @@ public class OfficeHourPage {
 
     private static void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
+
+        if (title.equals("Success"))
+            alert.setAlertType(Alert.AlertType.INFORMATION);
+
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    /**
+     * This method saves a user's office hour entry into a flat file.
+     *
+     * @param: OfficeHourEntry entry
+     * @return: Void
+     */
+
+    private static void saveToFile(OfficeHourEntry entry) throws IOException {
+        File file = new File("data/office_hours.csv");
+
+        // Create file if it doesn't exist
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+
+        // Append the new entry to the CSV file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
+            writer.write(entry.toString());
+            writer.newLine(); // Add a new line after each entry
+        }
+    }
+
+    /**
+     * This method checks if an entry is a duplicate of
+     * one already submitted (Semester and year).
+     *
+     * @param: OfficeHourEntry newEntry
+     * @return: boolean isDuplicate
+     */
+
+    private static boolean isDuplicate(OfficeHourEntry newEntry) throws IOException {
+        // Read the CSV file to check for duplicates
+        try (BufferedReader reader = new BufferedReader(new FileReader("data/office_hours.csv"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                OfficeHourEntry existingEntry = OfficeHourEntry.fromCSV(line);
+                if (newEntry.compares(existingEntry)) {
+                    reader.close();
+                    return true;  // Duplicate found
+                }
+            }
+        }
+        return false;
+
     }
 
     /**
@@ -224,16 +278,31 @@ public class OfficeHourPage {
             }
 
             if (isValid) {
+                // Create OfficeHourEntry object
+                List<String> selectedDays = new ArrayList<>();
+                if (monday.isSelected()) selectedDays.add("Monday");
+                if (tuesday.isSelected()) selectedDays.add("Tuesday");
+                if (wednesday.isSelected()) selectedDays.add("Wednesday");
+                if (thursday.isSelected()) selectedDays.add("Thursday");
+                if (friday.isSelected()) selectedDays.add("Friday");
+
+                OfficeHourEntry newEntry = new OfficeHourEntry(semester.getValue(), Integer.parseInt(yearInput), selectedDays);
+
                 try {
-                    MainMenuPage.setActive(stage);  // Switch to NewScene
+                    // Check for duplicates
+                    if (isDuplicate(newEntry)) {
+                        showAlert("Error", "This office hour entry already exists.");
+                    } else {
+                        saveToFile(newEntry);  // Save entry
+                        showAlert("Success", "Office hour entry successfully added.");
+                        MainMenuPage.setActive(stage);  // Switch to NewScene
+                    }
                 } catch (IOException ex) {
-                    throw new RuntimeException(ex);
+                    showAlert("Error", "Failed to save data.");
                 }
             } else {
-                String alertTitle = "Error";
-                showAlert(alertTitle, errorMessage);
+                showAlert("Error", errorMessage);
             }
-
         });
 
         backButton.setOnAction(_ -> {
