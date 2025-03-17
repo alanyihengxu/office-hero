@@ -51,15 +51,8 @@ public class OfficeHourPage {
      */
 
     private static void saveToFile(OfficeHourEntry entry) throws IOException {
-        File file = new File("data/office_hours.csv");
-
-        // Create file if it doesn't exist
-        if (!file.exists()) {
-            file.createNewFile();
-        }
-
         // Append the new entry to the CSV file
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("data/office_hours.csv", true))) {
             writer.write(entry.toString());
             writer.newLine(); // Add a new line after each entry
         }
