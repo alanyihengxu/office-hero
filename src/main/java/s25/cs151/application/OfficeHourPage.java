@@ -1,12 +1,10 @@
 package s25.cs151.application;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Alert;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -14,7 +12,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.IOException;
@@ -56,12 +53,6 @@ public class OfficeHourPage {
         File file = new File("data/office_hours.csv");
         // Append the new entry to the CSV file
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file,true))) {
-            if (file.length() == 0) {
-                // Write header only if the file is empty
-                writer.write("Semester,Year,Days");
-                writer.newLine();
-            }
-
             writer.write(entry.toString());
             writer.newLine(); // Add a new line after each entry
         }
@@ -80,8 +71,6 @@ public class OfficeHourPage {
         try (BufferedReader reader = new BufferedReader(new FileReader("data/office_hours.csv"))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                if (line.startsWith("Semester")) continue; //skips header line
-
                 OfficeHourEntry existingEntry = OfficeHourEntry.fromCSV(line);
                 if (newEntry.compares(existingEntry)) {
                     reader.close();
@@ -91,6 +80,19 @@ public class OfficeHourPage {
         }
         return false;
 
+    }
+    private static ObservableList<OfficeHourEntry> loadOfficeHours() throws IOException {
+        ObservableList<OfficeHourEntry> entries = FXCollections.observableArrayList();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader("data/office_hours.csv"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("Semester")) continue; //skips header line
+                OfficeHourEntry entry = OfficeHourEntry.fromCSV(line);
+                entries.add(entry);
+            }
+        }
+        return entries;
     }
 
     /**
@@ -133,6 +135,8 @@ public class OfficeHourPage {
         root.getChildren().add(title);
 
         //Display in TableView
+        TableView<OfficeHourEntry> tableView = new TableView<>();
+
         TableColumn<OfficeHourEntry, String> semesterColumn = new TableColumn<>("Semester");
         semesterColumn.setCellValueFactory(new PropertyValueFactory<>("semester"));
 
@@ -141,6 +145,26 @@ public class OfficeHourPage {
 
         TableColumn<OfficeHourEntry, List<String>> daysColumn = new TableColumn<>("Days");
         daysColumn.setCellValueFactory(new PropertyValueFactory<>("days"));
+
+        daysColumn.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(List<String> days, boolean empty) {
+                super.updateItem(days, empty);
+                if (empty || days == null) {
+                    setText(null);
+                } else {
+                    setText(String.join(", ", days));
+                }
+            }
+        });
+
+        tableView.getColumns().addAll(semesterColumn, yearColumn, daysColumn);
+        ObservableList<OfficeHourEntry> officeHourEntries = loadOfficeHours();
+        tableView.setItems(officeHourEntries);
+        tableView.setLayoutX(500);
+        tableView.setLayoutY(80);
+        tableView.setPrefSize(500, 250);
+        root.getChildren().add(tableView);
 
 
         Rectangle semesterBox = new Rectangle(190, 50);
@@ -207,13 +231,6 @@ public class OfficeHourPage {
         friday.setLayoutY(520);
 
         //Image
-        Image calendar = new Image("calendar1.png");
-        ImageView imageView = new ImageView(calendar);
-        imageView.setLayoutX(500);
-        imageView.setLayoutY(80);
-        imageView.setFitWidth(450);
-        imageView.setFitHeight(250);
-
         Image logo = new Image("logo.png");
         ImageView imageView1 = new ImageView(logo);
         imageView1.setLayoutX(700);
@@ -247,7 +264,6 @@ public class OfficeHourPage {
         root.getChildren().add(wednesday);
         root.getChildren().add(thursday);
         root.getChildren().add(friday);
-        root.getChildren().add(imageView);
         root.getChildren().add(imageView1);
         root.getChildren().add(logoText);
         root.getChildren().add(submitButton);
