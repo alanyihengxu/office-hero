@@ -4,7 +4,7 @@
 # who did what:
 1. Alan Xu: Page Navigation, Main, File Generation
 2. Minh Tran: Office Hours Page Requirements, Data Storage
-3. Benny Wen: Office Hours Page UI
+3. Benny Wen: TableView
 4. Octavio Valdivia: Main Menu Page UI
 
 
