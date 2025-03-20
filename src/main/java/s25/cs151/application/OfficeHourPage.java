@@ -14,6 +14,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -51,8 +53,15 @@ public class OfficeHourPage {
      */
 
     private static void saveToFile(OfficeHourEntry entry) throws IOException {
+        File file = new File("data/office_hours.csv");
         // Append the new entry to the CSV file
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("data/office_hours.csv", true))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file,true))) {
+            if (file.length() == 0) {
+                // Write header only if the file is empty
+                writer.write("Semester,Year,Days");
+                writer.newLine();
+            }
+
             writer.write(entry.toString());
             writer.newLine(); // Add a new line after each entry
         }
@@ -71,6 +80,8 @@ public class OfficeHourPage {
         try (BufferedReader reader = new BufferedReader(new FileReader("data/office_hours.csv"))) {
             String line;
             while ((line = reader.readLine()) != null) {
+                if (line.startsWith("Semester")) continue; //skips header line
+
                 OfficeHourEntry existingEntry = OfficeHourEntry.fromCSV(line);
                 if (newEntry.compares(existingEntry)) {
                     reader.close();
@@ -120,6 +131,17 @@ public class OfficeHourPage {
         title.setLayoutX(250);
         title.setLayoutY(60);
         root.getChildren().add(title);
+
+        //Display in TableView
+        TableColumn<OfficeHourEntry, String> semesterColumn = new TableColumn<>("Semester");
+        semesterColumn.setCellValueFactory(new PropertyValueFactory<>("semester"));
+
+        TableColumn<OfficeHourEntry, Integer> yearColumn = new TableColumn<>("Year");
+        yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
+
+        TableColumn<OfficeHourEntry, List<String>> daysColumn = new TableColumn<>("Days");
+        daysColumn.setCellValueFactory(new PropertyValueFactory<>("days"));
+
 
         Rectangle semesterBox = new Rectangle(190, 50);
         semesterBox.setFill(Color.ALICEBLUE);
@@ -232,7 +254,7 @@ public class OfficeHourPage {
         root.getChildren().add(backButton);
 
         //Submit button in action + checks for valid inputs
-        submitButton.setOnAction(_->{
+        submitButton.setOnAction(e->{
             boolean isValid = true;
             String errorMessage = "";
 
@@ -298,7 +320,7 @@ public class OfficeHourPage {
             }
         });
 
-        backButton.setOnAction(_ -> {
+        backButton.setOnAction(e -> {
             try {
                 MainMenuPage.setActive(stage);  // Switch to NewScene
             } catch (IOException ex) {

@@ -53,7 +53,7 @@ public class MainMenuPage {
         Button stackBt7 = new Button("Daily Report (PDF)");
 
         //Office Hours Button event on click
-        bt1.setOnAction(_-> {
+        bt1.setOnAction(e-> {
             try {
                 OfficeHourPage.setActive(stage);  // Switch to NewScene
             } catch (IOException ex) {
