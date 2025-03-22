@@ -7,27 +7,27 @@ import java.util.Collections;
 
 
 public class EntrySort {
+    /**
+     * This method is used to help organized the stored data in the csv file,
+     * it reparses the data and the uses its own comparator to sort it and
+     * override the csv file with the sorted data
+     *
+     * @param: String (filename)
+     * @return: List<OfficeHourEntry>
+     *
+     */
 
     public static List<OfficeHourEntry> readCSV(String filePath) {
         List<String[]> data = new ArrayList<>();
 
-        List<List<String>> realList = new ArrayList<>();
-
+        //Parsing data from csv file and adding it to a list of String[]
         try (BufferedReader in = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = in.readLine()) != null) {
                 data.add(line.split(","));
-                String[] days = line.split(",");
-                List<String> x = new ArrayList<>();
-                for (int i = 2; i < days.length; i++) {
-                    x.add(days[i]);
-                }
-                realList.add(x);
-                //for (int i = 2; i < days.length; i++) {
-                //    data.add(3, realList.get(i));
-                //}
-
             }
+
+            //Setting new natural order for String for Semester
 
             Comparator<String> customComparator = new Comparator<String>() {
                 @Override
@@ -80,17 +80,43 @@ public class EntrySort {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
+        //Reobtaining data from the List that has already been sorted
+        //Adding that data to a List of List of Strings to be able to
+        //Grab the index of the list giving  a list of Strings
+        int loop = 0;
+        List<List<String>> realList2 = new ArrayList<>();
+        for(int j = 2; loop < data.size(); j++){
+            String[] days = new String[data.get(loop).length - 2];
+            for(int o = 0; o < days.length; o++ ) {
+                days[o] = data.get(loop)[j];
+                j++;
+            }
+            List<String> y = new ArrayList<>();
+            for (int i = 0; i < days.length; i++) {
+                y.add(days[i]);
+                j--;
+            }
+
+            realList2.add(y);
+            loop++;
+            j--;
+        }
+
         List<OfficeHourEntry> x = new ArrayList<>();
 
-
-
-
         for (int i = 0; i < data.size(); i++) {
-            x.add(new OfficeHourEntry(data.get(i)[0], Integer.valueOf(data.get(i)[1]), realList.get(i)));
+            x.add(new OfficeHourEntry(data.get(i)[0], Integer.valueOf(data.get(i)[1]), realList2.get(i)));
         }
         return x;
     }
-
+    /**
+     * Takes the OfficeHourEntry List from method above and output it to the
+     * existing csv file
+     *
+     * @param: List<OfficeHourEntry>
+     * @return: void
+     *
+     */
     public static void addSortedData(List<OfficeHourEntry> l1) {
         File file = new File("data/office_hours.csv");
         // Append the new entry to the CSV file
