@@ -1,9 +1,7 @@
 package s25.cs151.application;
-import java.sql.SQLOutput;
 import java.util.*;
 import java.io.*;
 import java.util.Comparator;
-import java.util.Collections;
 
 
 public class EntrySort {
@@ -33,29 +31,29 @@ public class EntrySort {
                 @Override
                 public int compare(String o1, String o2) {
                     //Spring is the 1st semester (no need to swap)
-                    if ("Spring".equals(o1)) {
+                    if ("Winter".equals(o1)) {
                         return -1;
                     }
-                    else if ("Spring".equals(o2)) {
-                        return 1;
-                    }
-                    else if ("Fall".equals(o1) && "Winter".equals(o2)) {
-                        return -1;
-                    }
-
-                    else if ("Winter".equals(o1) && "Fall".equals(o2)) {
-                        return 1;
-                    }
-                    else if ("Fall".equals(o1) && "Summer".equals(o2)) {
+                    else if ("Winter".equals(o2)) {
                         return 1;
                     }
                     else if ("Summer".equals(o1) && "Fall".equals(o2)) {
                         return -1;
                     }
-                    else if ("Winter".equals(o1) && "Summer".equals(o2)) {
+
+                    else if ("Fall".equals(o1) && "Summer".equals(o2)) {
                         return 1;
                     }
-                    else if ("Summer".equals(o1) && "Winter".equals(o2)) {
+                    else if ("Summer".equals(o1) && "Spring".equals(o2)) {
+                        return 1;
+                    }
+                    else if ("Spring".equals(o1) && "Summer".equals(o2)) {
+                        return -1;
+                    }
+                    else if ("Fall".equals(o1) && "Spring".equals(o2)) {
+                        return 1;
+                    }
+                    else if ("Spring".equals(o1) && "Fall".equals(o2)) {
                         return -1;
                     }
                     else{
@@ -67,14 +65,14 @@ public class EntrySort {
             };
             //Compares first by year then by semester
             data.sort((a, b) -> {
-                int yearCompare = a[1].compareTo(b[1]);
+                int yearCompare = b[1].compareTo(a[1]);
                 if (yearCompare != 0) {
                     {
                         return yearCompare;
                     }
 
                 }
-                return customComparator.compare(a[0], b[0]);
+                return customComparator.compare(b[0], a[0]);
             });
 
         } catch (IOException ex) {
