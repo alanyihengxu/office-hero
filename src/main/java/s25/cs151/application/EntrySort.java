@@ -27,40 +27,37 @@ public class EntrySort {
 
             //Setting new natural order for String for Semester
 
-            Comparator<String> customComparator = new Comparator<String>() {
-                @Override
-                public int compare(String o1, String o2) {
-                    //Spring is the 1st semester (no need to swap)
-                    if ("Spring".equals(o1)) {
-                        return -1;
-                    }
-                    else if ("Spring".equals(o2)) {
-                        return 1;
-                    }
-                    else if ("Fall".equals(o1) && "Winter".equals(o2)) {
-                        return -1;
-                    }
-                    else if ("Winter".equals(o1) && "Fall".equals(o2)) {
-                        return 1;
-                    }
-                    else if ("Fall".equals(o1) && "Summer".equals(o2)) {
-                        return 1;
-                    }
-                    else if ("Summer".equals(o1) && "Fall".equals(o2)) {
-                        return -1;
-                    }
-                    else if ("Winter".equals(o1) && "Summer".equals(o2)) {
-                        return 1;
-                    }
-                    else if ("Summer".equals(o1) && "Winter".equals(o2)) {
-                        return -1;
-                    }
-                    else{
-                        System.out.println("Wrong Iput added");
-                    }
-
-                    return 0;
+            Comparator<String> customComparator = (o1, o2) -> {
+                //Spring is the 1st semester (no need to swap)
+                if ("Spring".equals(o1)) {
+                    return -1;
                 }
+                else if ("Spring".equals(o2)) {
+                    return 1;
+                }
+                else if ("Fall".equals(o1) && "Winter".equals(o2)) {
+                    return -1;
+                }
+                else if ("Winter".equals(o1) && "Fall".equals(o2)) {
+                    return 1;
+                }
+                else if ("Fall".equals(o1) && "Summer".equals(o2)) {
+                    return 1;
+                }
+                else if ("Summer".equals(o1) && "Fall".equals(o2)) {
+                    return -1;
+                }
+                else if ("Winter".equals(o1) && "Summer".equals(o2)) {
+                    return 1;
+                }
+                else if ("Summer".equals(o1) && "Winter".equals(o2)) {
+                    return -1;
+                }
+                else{
+                    System.out.println("Wrong Iput added");
+                }
+
+                return 0;
             };
             //Compares first by year then by semester
             data.sort((a, b) -> {
@@ -89,8 +86,8 @@ public class EntrySort {
                 j++;
             }
             List<String> y = new ArrayList<>();
-            for (int i = 0; i < days.length; i++) {
-                y.add(days[i]);
+            for (String day : days) {
+                y.add(day);
                 j--;
             }
 
@@ -102,7 +99,7 @@ public class EntrySort {
         List<OfficeHourEntry> x = new ArrayList<>();
 
         for (int i = 0; i < data.size(); i++) {
-            x.add(new OfficeHourEntry(data.get(i)[0], Integer.valueOf(data.get(i)[1]), realList2.get(i)));
+            x.add(new OfficeHourEntry(data.get(i)[0], Integer.parseInt(data.get(i)[1]), realList2.get(i)));
         }
         return x;
     }
@@ -118,8 +115,8 @@ public class EntrySort {
         File file = new File("data/office_hours.csv");
         // Append the new entry to the CSV file
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
-            for(int i = 0; i < l1.size(); i++) {
-                writer.write(l1.get(i).toString() + "\n");
+            for (OfficeHourEntry officeHourEntry : l1) {
+                writer.write(officeHourEntry.toString() + "\n");
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
