@@ -31,29 +31,28 @@ public class EntrySort {
                 @Override
                 public int compare(String o1, String o2) {
                     //Spring is the 1st semester (no need to swap)
-                    if ("Winter".equals(o1)) {
+                    if ("Spring".equals(o1)) {
                         return -1;
                     }
-                    else if ("Winter".equals(o2)) {
+                    else if ("Spring".equals(o2)) {
+                        return 1;
+                    }
+                    else if ("Fall".equals(o1) && "Winter".equals(o2)) {
+                        return -1;
+                    }
+                    else if ("Winter".equals(o1) && "Fall".equals(o2)) {
+                        return 1;
+                    }
+                    else if ("Fall".equals(o1) && "Summer".equals(o2)) {
                         return 1;
                     }
                     else if ("Summer".equals(o1) && "Fall".equals(o2)) {
                         return -1;
                     }
-
-                    else if ("Fall".equals(o1) && "Summer".equals(o2)) {
+                    else if ("Winter".equals(o1) && "Summer".equals(o2)) {
                         return 1;
                     }
-                    else if ("Summer".equals(o1) && "Spring".equals(o2)) {
-                        return 1;
-                    }
-                    else if ("Spring".equals(o1) && "Summer".equals(o2)) {
-                        return -1;
-                    }
-                    else if ("Fall".equals(o1) && "Spring".equals(o2)) {
-                        return 1;
-                    }
-                    else if ("Spring".equals(o1) && "Fall".equals(o2)) {
+                    else if ("Summer".equals(o1) && "Winter".equals(o2)) {
                         return -1;
                     }
                     else{
