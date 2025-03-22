@@ -50,8 +50,12 @@ public class OfficeHourPage {
      */
 
     private static void saveToFile(OfficeHourEntry entry) throws IOException {
+
         File file = new File("data/office_hours.csv");
         // Append the new entry to the CSV file
+        if (!file.exists()) {
+            file.createNewFile();
+        }
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file,true))) {
             writer.write(entry.toString());
             writer.newLine(); // Add a new line after each entry
@@ -325,6 +329,7 @@ public class OfficeHourPage {
                         showAlert("Error", "This office hour entry already exists.");
                     } else {
                         saveToFile(newEntry);  // Save entry
+                        EntrySort.addSortedData(EntrySort.readCSV("data/office_hours.csv"));
                         showAlert("Success", "Office hour entry successfully added.");
                         MainMenuPage.setActive(stage);  // Switch to NewScene
                     }
