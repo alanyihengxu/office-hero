@@ -15,7 +15,6 @@ import javafx.stage.Stage;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.*;
 import java.io.*;
 
@@ -50,13 +49,7 @@ public class OfficeHourPage {
      */
 
     private static void saveToFile(OfficeHourEntry entry) throws IOException {
-
-        File file = new File("data/office_hours.csv");
-        // Append the new entry to the CSV file
-        if (!file.exists()) {
-            file.createNewFile();
-        }
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file,true))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("data/office_hours.csv",true))) {
             writer.write(entry.toString());
             writer.newLine(); // Add a new line after each entry
         }
@@ -85,7 +78,7 @@ public class OfficeHourPage {
         return false;
 
     }
-    private static ObservableList<OfficeHourEntry> loadOfficeHours() throws IOException {
+    private static ObservableList<OfficeHourEntry> loadOfficeHours() {
         ObservableList<OfficeHourEntry> entries = FXCollections.observableArrayList();
 
         try (BufferedReader reader = new BufferedReader(new FileReader("data/office_hours.csv"))) {
@@ -95,6 +88,8 @@ public class OfficeHourPage {
                 OfficeHourEntry entry = OfficeHourEntry.fromCSV(line);
                 entries.add(entry);
             }
+        } catch(IOException ex) {
+            showAlert("Error", "Failed to load data.");
         }
         return entries;
     }
@@ -150,7 +145,7 @@ public class OfficeHourPage {
         TableColumn<OfficeHourEntry, List<String>> daysColumn = new TableColumn<>("Days");
         daysColumn.setCellValueFactory(new PropertyValueFactory<>("days"));
 
-        daysColumn.setCellFactory(column -> new TableCell<>() {
+        daysColumn.setCellFactory(_ -> new TableCell<>() {
             @Override
             protected void updateItem(List<String> days, boolean empty) {
                 super.updateItem(days, empty);
@@ -162,7 +157,9 @@ public class OfficeHourPage {
             }
         });
 
-        tableView.getColumns().addAll(semesterColumn, yearColumn, daysColumn);
+        tableView.getColumns().add(semesterColumn);
+        tableView.getColumns().add(yearColumn);
+        tableView.getColumns().add(daysColumn);
         ObservableList<OfficeHourEntry> officeHourEntries = loadOfficeHours();
         tableView.setItems(officeHourEntries);
         tableView.setLayoutX(500);
@@ -274,7 +271,7 @@ public class OfficeHourPage {
         root.getChildren().add(backButton);
 
         //Submit button in action + checks for valid inputs
-        submitButton.setOnAction(e->{
+        submitButton.setOnAction(_->{
             boolean isValid = true;
             String errorMessage = "";
 
@@ -302,14 +299,6 @@ public class OfficeHourPage {
             if (yearInput.length() != 4 || !allDigits) {
                 isValid = false;
                 errorMessage += "Please enter a valid year input of 4 digits.\n";
-            } else {
-
-                int years = Integer.parseInt(yearInput);
-                int currentYear = LocalDate.now().getYear();
-                if (years < currentYear) {
-                    isValid = false;
-                    errorMessage += "Please enter a current or future 4-digit year.\n";
-                }
             }
 
             if (isValid) {
@@ -341,7 +330,7 @@ public class OfficeHourPage {
             }
         });
 
-        backButton.setOnAction(e -> {
+        backButton.setOnAction(_ -> {
             try {
                 MainMenuPage.setActive(stage);  // Switch to NewScene
             } catch (IOException ex) {
