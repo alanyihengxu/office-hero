@@ -318,7 +318,7 @@ public class OfficeHourPage {
                         showAlert("Error", "This office hour entry already exists.");
                     } else {
                         saveToFile(newEntry);  // Save entry
-                        EntrySort.addSortedData(EntrySort.readCSV("data/office_hours.csv"));
+                        EntrySort.addSortedOfficeHourData(EntrySort.readOfficeHourCSV("data/office_hours.csv"));
                         showAlert("Success", "Office hour entry successfully added.");
                         MainMenuPage.setActive(stage);  // Switch to NewScene
                     }

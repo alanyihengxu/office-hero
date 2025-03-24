@@ -16,9 +16,14 @@ public class Main extends Application {
         }
 
         // Create file if it doesn't exist
-        File file = new File("data/office_hours.csv");
-        if (file.createNewFile()) {
-            System.out.println("Created new file: " + file);
+        File officeHourFile = new File("data/office_hours.csv");
+        if (officeHourFile.createNewFile()) {
+            System.out.println("Created new file: " + officeHourFile);
+        }
+
+        File courseFile = new File("data/courses.csv");
+        if (courseFile.createNewFile()) {
+            System.out.println("Created new file: " + courseFile);
         }
     }
 
