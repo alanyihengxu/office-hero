@@ -15,7 +15,7 @@ public class EntrySort {
      *
      */
 
-    public static List<OfficeHourEntry> readCSV(String filePath) {
+    public static List<OfficeHourEntry> readOfficeHourCSV(String filePath) {
         List<String[]> data = new ArrayList<>();
 
         //Parsing data from csv file and adding it to a list of String[]
@@ -103,6 +103,32 @@ public class EntrySort {
         }
         return x;
     }
+
+    public static List<CourseEntry> readCourseCSV(String filePath) {
+        List<String[]> data = new ArrayList<>();
+
+        //Parsing data from csv file and adding it to a list of String[]
+        try (BufferedReader in = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = in.readLine()) != null) {
+                data.add(line.split(","));
+            }
+
+            //Compares by course code
+            data.sort((a, b) -> b[0].compareTo(a[0]));
+
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+
+        List<CourseEntry> x = new ArrayList<>();
+
+        for (String[] entry : data) {
+            x.add(new CourseEntry(entry[0], entry[1], entry[2]));
+        }
+        return x;
+    }
+
     /**
      * Takes the OfficeHourEntry List from method above and output it to the
      * existing csv file
@@ -111,12 +137,24 @@ public class EntrySort {
      * @return: void
      *
      */
-    public static void addSortedData(List<OfficeHourEntry> l1) {
+    public static void addSortedOfficeHourData(List<OfficeHourEntry> l1) {
         File file = new File("data/office_hours.csv");
         // Append the new entry to the CSV file
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
             for (OfficeHourEntry officeHourEntry : l1) {
                 writer.write(officeHourEntry.toString() + "\n");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void addSortedCourseData(List<CourseEntry> l1) {
+        File file = new File("data/courses.csv");
+        // Append the new entry to the CSV file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
+            for (CourseEntry courseEntry : l1) {
+                writer.write(courseEntry.toString() + "\n");
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
