@@ -1,25 +1,31 @@
 package s25.cs151.application;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.io.IOException;
-import java.util.*;
+
 import java.io.*;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class OfficeHourPage {
+public class SemesterTimeSlotUI {
     /**
      * This method is a helper method for displaying alerts; the default alert
      * type is error.
@@ -48,6 +54,8 @@ public class OfficeHourPage {
      * @return: Void
      */
 
+    //TODO: SAVE TO NEW CVS FILE NAMED: "SEMESTERTIMESLOTCSV" (NOT UI)
+
     private static void saveToFile(OfficeHourEntry entry) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("data/office_hours.csv",true))) {
             writer.write(entry.toString());
@@ -63,6 +71,7 @@ public class OfficeHourPage {
      * @return: boolean isDuplicate
      */
 
+    //TODO: CHECK FOR TIME REPEATS (NOT UI)
     private static boolean isDuplicate(OfficeHourEntry newEntry) throws IOException {
         // Read the CSV file to check for duplicates
         try (BufferedReader reader = new BufferedReader(new FileReader("data/office_hours.csv"))) {
@@ -78,6 +87,9 @@ public class OfficeHourPage {
         return false;
 
     }
+
+    //TODO: UPDATE TABLE BASED ON INFO GATHERED (NOT UI)
+    /*
     private static ObservableList<OfficeHourEntry> loadOfficeHours() {
         ObservableList<OfficeHourEntry> entries = FXCollections.observableArrayList();
 
@@ -93,13 +105,12 @@ public class OfficeHourPage {
         }
         return entries;
     }
-
+ */
     /**
      * This method makes it so a stage that becomes active.
-     * This stage houses the office hour page which allows users to
-     * 1.Select Semester
-     * 2.Enter current year
-     * 3.Select days for office hours
+     * This stage allows user to pick a selected start time
+     * and end time for their office hours then displays it on the table
+     *
      * @param: Stage (stage object)
      * @return: Void
      *
@@ -109,7 +120,7 @@ public class OfficeHourPage {
         Pane root = new Pane();
         StackPane stackPane = new StackPane();
         StackPane stackPane2 = new StackPane();
-        StackPane stackPane3 = new StackPane();
+        //StackPane stackPane3 = new StackPane();
 
         //Background color
         Rectangle backgroundColor = new Rectangle(1000, 600);
@@ -127,41 +138,22 @@ public class OfficeHourPage {
 
 
         // Main title
-        Text title = new Text("Semester Office Hours");
+        Text title = new Text("Semester Time Slots");
         title.setStyle("-fx-font-size: 48px; -fx-font-weight: bold; -fx-text-fill: black;");
-        title.setLayoutX(230);
+        title.setLayoutX(250);
         title.setLayoutY(60);
         root.getChildren().add(title);
 
         //Display in TableView
         TableView<OfficeHourEntry> tableView = new TableView<>();
 
-        TableColumn<OfficeHourEntry, String> semesterColumn = new TableColumn<>("Semester");
-        semesterColumn.setCellValueFactory(new PropertyValueFactory<>("semester"));
+        TableColumn<OfficeHourEntry, String> startTimeColumn = new TableColumn<>("From Time:");
 
-        TableColumn<OfficeHourEntry, Integer> yearColumn = new TableColumn<>("Year");
-        yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
+        TableColumn<OfficeHourEntry, Integer> endTimeColumn = new TableColumn<>("To Time:");
 
-        TableColumn<OfficeHourEntry, List<String>> daysColumn = new TableColumn<>("Days");
-        daysColumn.setCellValueFactory(new PropertyValueFactory<>("days"));
 
-        daysColumn.setCellFactory(_ -> new TableCell<>() {
-            @Override
-            protected void updateItem(List<String> days, boolean empty) {
-                super.updateItem(days, empty);
-                if (empty || days == null) {
-                    setText(null);
-                } else {
-                    setText(String.join(", ", days));
-                }
-            }
-        });
-
-        tableView.getColumns().add(semesterColumn);
-        tableView.getColumns().add(yearColumn);
-        tableView.getColumns().add(daysColumn);
-        ObservableList<OfficeHourEntry> officeHourEntries = loadOfficeHours();
-        tableView.setItems(officeHourEntries);
+        tableView.getColumns().add(startTimeColumn);
+        tableView.getColumns().add(endTimeColumn);
         tableView.setLayoutX(500);
         tableView.setLayoutY(80);
         tableView.setPrefSize(500, 250);
@@ -171,65 +163,53 @@ public class OfficeHourPage {
         Rectangle semesterBox = new Rectangle(190, 50);
         semesterBox.setFill(Color.ALICEBLUE);
 
-        Text semesterLabel = new Text("Select the current semester:");
+        Text semesterLabel = new Text("From Hour:");
         semesterLabel.setStyle("-fx-font-size: 16px;");
         stackPane.getChildren().addAll(semesterBox, semesterLabel);
         stackPane.setLayoutX(15);
         stackPane.setLayoutY(120);
 
         //Semester selection
-        ComboBox<String> semester = new ComboBox<>();
-        semester.getItems().addAll("Spring", "Summer", "Fall", "Winter");
-        semester.setValue("Spring");
-        semester.setLayoutX(250);
-        semester.setLayoutY(130);
+        HBox timeSelect1 = new HBox();
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
+        Spinner<Integer> hourSelect1 = new Spinner<>(0, 12, LocalTime.now().getHour());
+        hourSelect1.setPrefWidth(120);
+        hourSelect1.setEditable(true);
+
+        Spinner<Integer> minuteSelect1 = new Spinner<>(0, 59, LocalTime.now().getMinute());
+        minuteSelect1.setEditable(true);
+        minuteSelect1.setPrefWidth(120);
+
+        //Adding to Hbox
+        timeSelect1.getChildren().addAll(hourSelect1,minuteSelect1);
+        timeSelect1.setLayoutX(250);
+        timeSelect1.setLayoutY(130);
+
+
+        HBox timeSelect2 = new HBox();
+
+        Spinner<Integer> hourSelect2 = new Spinner<>(0, 12, LocalTime.now().getHour());
+        hourSelect2.setPrefWidth(120);
+        hourSelect2.setEditable(true);
+
+        Spinner<Integer> minuteSelect2 = new Spinner<>(0, 59, LocalTime.now().getMinute());
+        minuteSelect2.setEditable(true);
+        minuteSelect2.setPrefWidth(120);
+
+        //Adding to Hbox
+        timeSelect2.getChildren().addAll(hourSelect2,minuteSelect2);
+        timeSelect2.setLayoutX(250);
+        timeSelect2.setLayoutY(280);
 
         Rectangle yearBox = new Rectangle(190, 50);
         yearBox.setFill(Color.ALICEBLUE);
 
-        Text yearLabel = new Text("Enter the current year:");
+        Text yearLabel = new Text("To Hours:");
         yearLabel.setStyle("-fx-font-size: 16px;");
         stackPane2.getChildren().addAll(yearBox, yearLabel);
         stackPane2.setLayoutX(15);
         stackPane2.setLayoutY(270);
-
-        //Year info
-        TextField year = new TextField();
-        year.setPromptText("Enter the year");
-        year.setStyle("-fx-padding: 10px; -fx-font-size: 16px;");
-        year.setFocusTraversable(false);
-        year.setLayoutX(250);
-        year.setLayoutY(280);
-
-        Rectangle dayBox = new Rectangle(190, 50);
-        dayBox.setFill(Color.ALICEBLUE);
-
-        Text dayLabel = new Text("Select the days available:");
-        dayLabel.setStyle("-fx-font-size: 16px;");
-        stackPane3.getChildren().addAll(dayBox, dayLabel);
-        stackPane3.setLayoutX(15);
-        stackPane3.setLayoutY(400);
-
-        //Day selection
-        CheckBox monday = new CheckBox("Monday");
-        monday.setLayoutX(250);
-        monday.setLayoutY(400);
-
-        CheckBox tuesday = new CheckBox("Tuesday");
-        tuesday.setLayoutX(250);
-        tuesday.setLayoutY(430);
-
-        CheckBox wednesday = new CheckBox("Wednesday");
-        wednesday.setLayoutX(250);
-        wednesday.setLayoutY(460);
-
-        CheckBox thursday = new CheckBox("Thursday");
-        thursday.setLayoutX(250);
-        thursday.setLayoutY(490);
-
-        CheckBox friday = new CheckBox("Friday");
-        friday.setLayoutX(250);
-        friday.setLayoutY(520);
 
         //Image
         Image logo = new Image("logo.png");
@@ -257,14 +237,8 @@ public class OfficeHourPage {
         //adding all the visual elements to the pane
         root.getChildren().add(stackPane);
         root.getChildren().add(stackPane2);
-        root.getChildren().add(stackPane3);
-        root.getChildren().add(year);
-        root.getChildren().add(semester);
-        root.getChildren().add(monday);
-        root.getChildren().add(tuesday);
-        root.getChildren().add(wednesday);
-        root.getChildren().add(thursday);
-        root.getChildren().add(friday);
+        root.getChildren().add(timeSelect1);
+        root.getChildren().add(timeSelect2);
         root.getChildren().add(imageView1);
         root.getChildren().add(logoText);
         root.getChildren().add(submitButton);
@@ -272,62 +246,12 @@ public class OfficeHourPage {
 
         //Submit button in action + checks for valid inputs
         submitButton.setOnAction(_->{
-            boolean isValid = true;
-            String errorMessage = "";
+            int hour1 = hourSelect1.getValue();
+            int minutes1 = minuteSelect1.getValue();
+            int hour2 = hourSelect2.getValue();
+            int minutes2 = minuteSelect2.getValue();
+           // int hour2
 
-            if (semester.getValue() == null) {
-                isValid = false;
-                errorMessage += "Please select a semester.\n";
-            }
-
-            if (!(monday.isSelected() || tuesday.isSelected() ||
-                    wednesday.isSelected() || thursday.isSelected() ||
-                    friday.isSelected())) {
-                isValid = false;
-                errorMessage += "Please select at least one day.\n";
-            }
-
-            String yearInput = year.getText();
-            boolean allDigits = true;
-            for (int i = 0; i < yearInput.length(); i++) {
-                if (!Character.isDigit(yearInput.charAt(i))) {
-                    allDigits = false;
-                    break;
-                }
-            }
-
-            if (yearInput.length() != 4 || !allDigits) {
-                isValid = false;
-                errorMessage += "Please enter a valid year input of 4 digits.\n";
-            }
-
-            if (isValid) {
-                // Create OfficeHourEntry object
-                List<String> selectedDays = new ArrayList<>();
-                if (monday.isSelected()) selectedDays.add("Monday");
-                if (tuesday.isSelected()) selectedDays.add("Tuesday");
-                if (wednesday.isSelected()) selectedDays.add("Wednesday");
-                if (thursday.isSelected()) selectedDays.add("Thursday");
-                if (friday.isSelected()) selectedDays.add("Friday");
-
-                OfficeHourEntry newEntry = new OfficeHourEntry(semester.getValue(), Integer.parseInt(yearInput), selectedDays);
-
-                try {
-                    // Check for duplicates
-                    if (isDuplicate(newEntry)) {
-                        showAlert("Error", "This office hour entry already exists.");
-                    } else {
-                        saveToFile(newEntry);  // Save entry
-                        EntrySort.addSortedOfficeHourData(EntrySort.readOfficeHourCSV("data/office_hours.csv"));
-                        showAlert("Success", "Office hour entry successfully added.");
-                        MainMenuPage.setActive(stage);  // Switch to NewScene
-                    }
-                } catch (IOException ex) {
-                    showAlert("Error", "Failed to save data.");
-                }
-            } else {
-                showAlert("Error", errorMessage);
-            }
         });
 
         backButton.setOnAction(_ -> {
