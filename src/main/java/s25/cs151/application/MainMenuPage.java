@@ -64,7 +64,7 @@ public class MainMenuPage {
         //New Hours Button event on click
         bt2.setOnAction(_-> {
             try {
-                SemesterTimeSlotUI.setActive(stage);  // Switch to NewScene
+                TimeSlotPage.setActive(stage);  // Switch to NewScene
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
