@@ -1,5 +1,8 @@
 package s25.cs151.application;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -41,64 +44,18 @@ public class TimeSlotPage {
     }
 
     /**
-     * This method saves a user's office hour entry into a flat file.
+     * This method saves a user's time slot entry into a flat file.
      *
-     * @param: OfficeHourEntry entry
+     * @param: TimeSlotEntry entry
      * @return: Void
      */
-
-    //TODO: SAVE TO NEW CVS FILE NAMED: "SEMESTERTIMESLOTCSV" (NOT UI)
-
-    private static void saveToFile(OfficeHourEntry entry) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("data/office_hours.csv",true))) {
+    private static void saveTimeSlotToFile(TimeSlotEntry entry) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("data/semester_time_slots.csv", true))) {
             writer.write(entry.toString());
-            writer.newLine(); // Add a new line after each entry
+            writer.newLine();
         }
     }
 
-    /**
-     * This method checks if an entry is a duplicate of
-     * one already submitted (Semester and year).
-     *
-     * @param: OfficeHourEntry newEntry
-     * @return: boolean isDuplicate
-     */
-
-    //TODO: CHECK FOR TIME REPEATS (NOT UI)
-    private static boolean isDuplicate(OfficeHourEntry newEntry) throws IOException {
-        // Read the CSV file to check for duplicates
-        try (BufferedReader reader = new BufferedReader(new FileReader("data/office_hours.csv"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                OfficeHourEntry existingEntry = OfficeHourEntry.fromCSV(line);
-                if (newEntry.compares(existingEntry)) {
-                    reader.close();
-                    return true;  // Duplicate found
-                }
-            }
-        }
-        return false;
-
-    }
-
-    //TODO: UPDATE TABLE BASED ON INFO GATHERED (NOT UI)
-    /*
-    private static ObservableList<OfficeHourEntry> loadOfficeHours() {
-        ObservableList<OfficeHourEntry> entries = FXCollections.observableArrayList();
-
-        try (BufferedReader reader = new BufferedReader(new FileReader("data/office_hours.csv"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (line.startsWith("Semester")) continue; //skips header line
-                OfficeHourEntry entry = OfficeHourEntry.fromCSV(line);
-                entries.add(entry);
-            }
-        } catch(IOException ex) {
-            showAlert("Error", "Failed to load data.");
-        }
-        return entries;
-    }
- */
     /**
      * This method makes it so a stage that becomes active.
      * This stage allows user to pick a selected start time
@@ -138,15 +95,29 @@ public class TimeSlotPage {
         root.getChildren().add(title);
 
         //Display in TableView
-        TableView<OfficeHourEntry> tableView = new TableView<>();
+        TableView<TimeSlotEntry> tableView = new TableView<>();
 
-        TableColumn<OfficeHourEntry, String> startTimeColumn = new TableColumn<>("From Time:");
+        TableColumn<TimeSlotEntry, String> fromTimeColumn = new TableColumn<>("From Time:");
+        fromTimeColumn.setCellValueFactory(cellData -> {
+            TimeSlotEntry entry = cellData.getValue();
+            String formatted = String.format("%02d:%02d", entry.getFromHour(), entry.getFromMinute());
+            return new ReadOnlyStringWrapper(formatted);
+        });
 
-        TableColumn<OfficeHourEntry, Integer> endTimeColumn = new TableColumn<>("To Time:");
+        TableColumn<TimeSlotEntry, String> toTimeColumn = new TableColumn<>("To Time:");
+        toTimeColumn.setCellValueFactory(cellData -> {
+            TimeSlotEntry entry = cellData.getValue();
+            String formatted = String.format("%02d:%02d", entry.getToHour(), entry.getToMinute());
+            return new ReadOnlyStringWrapper(formatted);
+        });
 
+        tableView.getColumns().add(fromTimeColumn);
+        tableView.getColumns().add(toTimeColumn);
 
-        tableView.getColumns().add(startTimeColumn);
-        tableView.getColumns().add(endTimeColumn);
+        ObservableList<TimeSlotEntry> timeSlotEntries =
+                FXCollections.observableArrayList(EntrySort.readTimeSlotCSV("data/semester_time_slots.csv"));
+        tableView.setItems(timeSlotEntries);
+
         tableView.setLayoutX(500);
         tableView.setLayoutY(80);
         tableView.setPrefSize(500, 250);
@@ -166,12 +137,12 @@ public class TimeSlotPage {
         HBox timeSelect1 = new HBox();
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
-        Spinner<Integer> hourSelect1 = new Spinner<>(0, 12, LocalTime.now().getHour());
+        Spinner<Integer> hourSelect1 = new Spinner<>(0, 23, LocalTime.now().getHour());
         hourSelect1.setPrefWidth(120);
-        hourSelect1.setEditable(true);
+        hourSelect1.setEditable(false);
 
         Spinner<Integer> minuteSelect1 = new Spinner<>(0, 59, LocalTime.now().getMinute());
-        minuteSelect1.setEditable(true);
+        minuteSelect1.setEditable(false);
         minuteSelect1.setPrefWidth(120);
 
         //Adding to Hbox
@@ -182,12 +153,12 @@ public class TimeSlotPage {
 
         HBox timeSelect2 = new HBox();
 
-        Spinner<Integer> hourSelect2 = new Spinner<>(0, 12, LocalTime.now().getHour());
+        Spinner<Integer> hourSelect2 = new Spinner<>(0, 23, LocalTime.now().getHour());
         hourSelect2.setPrefWidth(120);
-        hourSelect2.setEditable(true);
+        hourSelect2.setEditable(false);
 
         Spinner<Integer> minuteSelect2 = new Spinner<>(0, 59, LocalTime.now().getMinute());
-        minuteSelect2.setEditable(true);
+        minuteSelect2.setEditable(false);
         minuteSelect2.setPrefWidth(120);
 
         //Adding to Hbox
@@ -238,14 +209,37 @@ public class TimeSlotPage {
         root.getChildren().add(backButton);
 
         //Submit button in action + checks for valid inputs
-        submitButton.setOnAction(_->{
-            int hour1 = hourSelect1.getValue();
-            int minutes1 = minuteSelect1.getValue();
-            int hour2 = hourSelect2.getValue();
-            int minutes2 = minuteSelect2.getValue();
-           // int hour2
+        submitButton.setOnAction(_ -> {
+            boolean isValid = true;
+            String errorMessage = "";
 
+            int fromHour = hourSelect1.getValue();
+            int fromMinute = minuteSelect1.getValue();
+            int toHour = hourSelect2.getValue();
+            int toMinute = minuteSelect2.getValue();
+
+            // Validation: ensure end time is after start time
+            if (toHour < fromHour || (toHour == fromHour && toMinute <= fromMinute)) {
+                isValid = false;
+                errorMessage += "End time must be after start time.\n";
+            }
+
+            if (isValid) {
+                TimeSlotEntry newEntry = new TimeSlotEntry(fromHour, fromMinute, toHour, toMinute);
+
+                try {
+                    saveTimeSlotToFile(newEntry);
+                    EntrySort.addSortedTimeSlotData(EntrySort.readTimeSlotCSV("data/semester_time_slots.csv"));
+                    showAlert("Success", "Time slot entry successfully added.");
+                    MainMenuPage.setActive(stage);
+                } catch (IOException ex) {
+                    showAlert("Error", "Failed to save data.");
+                }
+            } else {
+                showAlert("Error", errorMessage);
+            }
         });
+
 
         backButton.setOnAction(_ -> {
             try {
