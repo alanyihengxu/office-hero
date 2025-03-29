@@ -104,6 +104,14 @@ public class EntrySort {
         return x;
     }
 
+    /**
+     * This method is used to read and sort the stored course data in the csv file,
+     *
+     *
+     * @param: String (filename)
+     * @return: List<CourseEntry>
+     *
+     */
     public static List<CourseEntry> readCourseCSV(String filePath) {
         List<String[]> data = new ArrayList<>();
 
@@ -130,6 +138,39 @@ public class EntrySort {
     }
 
     /**
+     * This method is used to read and sort the stored time slot data in the csv file,
+     *
+     *
+     * @param: String (filename)
+     * @return: List<TimeSlotEntry>
+     *
+     */
+    public static List<TimeSlotEntry> readTimeSlotCSV(String filePath) {
+        List<TimeSlotEntry> data = new ArrayList<>();
+
+        try (BufferedReader in = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = in.readLine()) != null) {
+                TimeSlotEntry entry = TimeSlotEntry.fromCSV(line);
+                data.add(entry);
+            }
+
+            // Sort ascending by fromHour → fromMinute → toHour → toMinute
+            data.sort(Comparator
+                    .comparingInt(TimeSlotEntry::getFromHour)
+                    .thenComparingInt(TimeSlotEntry::getFromMinute)
+                    .thenComparingInt(TimeSlotEntry::getToHour)
+                    .thenComparingInt(TimeSlotEntry::getToMinute)
+            );
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return data;
+    }
+
+    /**
      * Takes the OfficeHourEntry List from method above and output it to the
      * existing csv file
      *
@@ -149,6 +190,14 @@ public class EntrySort {
         }
     }
 
+    /**
+     * Takes the CourseEntry List from readCourseCSV and writes to the
+     * existing csv file
+     *
+     * @param: List<CourseEntry>
+     * @return: void
+     *
+     */
     public static void addSortedCourseData(List<CourseEntry> l1) {
         File file = new File("data/courses.csv");
         // Append the new entry to the CSV file
@@ -158,6 +207,26 @@ public class EntrySort {
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Takes the TimeSlotEntry List from readTimeSlotsCSV and writes to the
+     * existing csv file
+     *
+     * @param: List<TimeSlotEntry>
+     * @return: void
+     *
+     */
+    public static void addSortedTimeSlotData(List<TimeSlotEntry> list) {
+        File file = new File("data/semester_time_slots.csv");
+        //Append the new entry to the CSV file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
+            for (TimeSlotEntry timeSlotEntry : list) {
+                writer.write(timeSlotEntry.toString() + "\n");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error writing sorted TimeSlot data", e);
         }
     }
 }
