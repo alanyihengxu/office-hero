@@ -18,7 +18,6 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 
 public class TimeSlotPage {
@@ -135,7 +134,6 @@ public class TimeSlotPage {
 
         //Semester selection
         HBox timeSelect1 = new HBox();
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
         Spinner<Integer> hourSelect1 = new Spinner<>(0, 23, LocalTime.now().getHour());
         hourSelect1.setPrefWidth(120);
@@ -231,7 +229,6 @@ public class TimeSlotPage {
                     saveTimeSlotToFile(newEntry);
                     EntrySort.addSortedTimeSlotData(EntrySort.readTimeSlotCSV("data/semester_time_slots.csv"));
                     showAlert("Success", "Time slot entry successfully added.");
-                    MainMenuPage.setActive(stage);
                 } catch (IOException ex) {
                     showAlert("Error", "Failed to save data.");
                 }

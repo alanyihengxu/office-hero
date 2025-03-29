@@ -25,6 +25,11 @@ public class Main extends Application {
         if (courseFile.createNewFile()) {
             System.out.println("Created new file: " + courseFile);
         }
+
+        File timeslotFile = new File("data/semester_time_slots.csv");
+        if (timeslotFile.createNewFile()) {
+            System.out.println("Created new file: " + timeslotFile);
+        }
     }
 
 
