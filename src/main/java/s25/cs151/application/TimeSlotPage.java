@@ -198,7 +198,7 @@ public class TimeSlotPage {
         Rectangle yearBox = new Rectangle(190, 50);
         yearBox.setFill(Color.ALICEBLUE);
 
-        Text yearLabel = new Text("To Hours:");
+        Text yearLabel = new Text("To Hour:");
         yearLabel.setStyle("-fx-font-size: 16px;");
         stackPane2.getChildren().addAll(yearBox, yearLabel);
         stackPane2.setLayoutX(15);
@@ -238,7 +238,7 @@ public class TimeSlotPage {
         root.getChildren().add(backButton);
 
         //Submit button in action + checks for valid inputs
-        submitButton.setOnAction(e->{
+        submitButton.setOnAction(_->{
             int hour1 = hourSelect1.getValue();
             int minutes1 = minuteSelect1.getValue();
             int hour2 = hourSelect2.getValue();
@@ -247,7 +247,7 @@ public class TimeSlotPage {
 
         });
 
-        backButton.setOnAction(e -> {
+        backButton.setOnAction(_ -> {
             try {
                 MainMenuPage.setActive(stage);  // Switch to NewScene
             } catch (IOException ex) {

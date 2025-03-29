@@ -158,7 +158,7 @@ public class CoursePage {
         Rectangle nameBox = new Rectangle(190, 50);
         nameBox.setFill(Color.ALICEBLUE);
 
-        Text nameLabel = new Text("Enter the current year:");
+        Text nameLabel = new Text("Course Name:");
         nameLabel.setStyle("-fx-font-size: 16px;");
         stackPane2.getChildren().addAll(nameBox, nameLabel);
         stackPane2.setLayoutX(15);
@@ -174,7 +174,7 @@ public class CoursePage {
         Rectangle sectionNumBox = new Rectangle(190, 50);
         sectionNumBox.setFill(Color.ALICEBLUE);
 
-        Text sectionNumLabel = new Text("Select the days available:");
+        Text sectionNumLabel = new Text("Section Number:");
         sectionNumLabel.setStyle("-fx-font-size: 16px;");
         stackPane3.getChildren().addAll(sectionNumBox, sectionNumLabel);
         stackPane3.setLayoutX(15);
@@ -212,7 +212,7 @@ public class CoursePage {
         backButton.setLayoutY(30);
         root.getChildren().add(backButton);
 
-        submitButton.setOnAction(e->{
+        submitButton.setOnAction(_->{
             boolean isValid = true;
             String errorMessage = "";
 
@@ -253,7 +253,7 @@ public class CoursePage {
             }
         });
 
-        backButton.setOnAction(e -> {
+        backButton.setOnAction(_ -> {
             try {
                 MainMenuPage.setActive(stage);  // Switch to NewScene
             } catch (IOException ex) {
