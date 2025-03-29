@@ -127,7 +127,7 @@ public class TimeSlotPage {
         Rectangle semesterBox = new Rectangle(190, 50);
         semesterBox.setFill(Color.ALICEBLUE);
 
-        Text semesterLabel = new Text("From Hour:");
+        Text semesterLabel = new Text("From Time:");
         semesterLabel.setStyle("-fx-font-size: 16px;");
         stackPane.getChildren().addAll(semesterBox, semesterLabel);
         stackPane.setLayoutX(15);
@@ -169,7 +169,7 @@ public class TimeSlotPage {
         Rectangle yearBox = new Rectangle(190, 50);
         yearBox.setFill(Color.ALICEBLUE);
 
-        Text yearLabel = new Text("To Hours:");
+        Text yearLabel = new Text("To Time:");
         yearLabel.setStyle("-fx-font-size: 16px;");
         stackPane2.getChildren().addAll(yearBox, yearLabel);
         stackPane2.setLayoutX(15);
@@ -189,9 +189,9 @@ public class TimeSlotPage {
         logoText.setLayoutY(370);
 
         //Submit button
-        Button submitButton = new Button("Submit");
+        Button submitButton = new Button("Add Entry");
         submitButton.setLayoutX(250);
-        submitButton.setLayoutY(570);
+        submitButton.setLayoutY(370);
 
         //Back to home page button
         Button backButton = new Button("Back to Home Page");
@@ -231,7 +231,6 @@ public class TimeSlotPage {
                     saveTimeSlotToFile(newEntry);
                     EntrySort.addSortedTimeSlotData(EntrySort.readTimeSlotCSV("data/semester_time_slots.csv"));
                     showAlert("Success", "Time slot entry successfully added.");
-                    MainMenuPage.setActive(stage);
                 } catch (IOException ex) {
                     showAlert("Error", "Failed to save data.");
                 }
