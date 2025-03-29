@@ -17,7 +17,6 @@ import javafx.stage.Stage;
 
 
 import java.io.*;
-import java.time.LocalTime;
 
 
 public class TimeSlotPage {
@@ -135,11 +134,11 @@ public class TimeSlotPage {
         //Semester selection
         HBox timeSelect1 = new HBox();
 
-        Spinner<Integer> hourSelect1 = new Spinner<>(0, 23, LocalTime.now().getHour());
+        Spinner<Integer> hourSelect1 = new Spinner<>(0, 23, 0);
         hourSelect1.setPrefWidth(120);
         hourSelect1.setEditable(false);
 
-        Spinner<Integer> minuteSelect1 = new Spinner<>(0, 59, LocalTime.now().getMinute());
+        Spinner<Integer> minuteSelect1 = new Spinner<>(0, 59, 0);
         minuteSelect1.setEditable(false);
         minuteSelect1.setPrefWidth(120);
 
@@ -151,11 +150,11 @@ public class TimeSlotPage {
 
         HBox timeSelect2 = new HBox();
 
-        Spinner<Integer> hourSelect2 = new Spinner<>(0, 23, LocalTime.now().getHour());
+        Spinner<Integer> hourSelect2 = new Spinner<>(0, 23, 0);
         hourSelect2.setPrefWidth(120);
         hourSelect2.setEditable(false);
 
-        Spinner<Integer> minuteSelect2 = new Spinner<>(0, 59, LocalTime.now().getMinute());
+        Spinner<Integer> minuteSelect2 = new Spinner<>(0, 59, 0);
         minuteSelect2.setEditable(false);
         minuteSelect2.setPrefWidth(120);
 
@@ -229,6 +228,7 @@ public class TimeSlotPage {
                     saveTimeSlotToFile(newEntry);
                     EntrySort.addSortedTimeSlotData(EntrySort.readTimeSlotCSV("data/semester_time_slots.csv"));
                     showAlert("Success", "Time slot entry successfully added.");
+                    TimeSlotPage.setActive(stage); // Reload page
                 } catch (IOException ex) {
                     showAlert("Error", "Failed to save data.");
                 }
