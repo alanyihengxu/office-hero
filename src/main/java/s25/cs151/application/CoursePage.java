@@ -5,7 +5,13 @@ import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -87,6 +93,31 @@ public class CoursePage {
 
     public static void setActive(Stage stage) throws IOException {
         Pane root = new Pane();
+        StackPane stackPane = new StackPane();
+        StackPane stackPane2 = new StackPane();
+        StackPane stackPane3 = new StackPane();
+
+        //Background color
+        Rectangle backgroundColor = new Rectangle(1000, 600);
+        backgroundColor.setFill(Color.KHAKI);
+        root.getChildren().add(backgroundColor);
+
+        Rectangle blueRectangle = new Rectangle(220, 600);
+        blueRectangle.setFill(Color.DARKKHAKI);
+
+        blueRectangle.setLayoutX(0);
+        blueRectangle.setLayoutY(0);
+
+        // Add the blue rectangle to the root
+        root.getChildren().add(blueRectangle);
+
+        // Main title
+        Text title = new Text("Course Information");
+        title.setStyle("-fx-font-size: 48px; -fx-font-weight: bold; -fx-text-fill: black;");
+        title.setLayoutX(260);
+        title.setLayoutY(60);
+        root.getChildren().add(title);
+
 
         TableView<CourseEntry> tableView = new TableView<>();
         TableColumn<CourseEntry, String> courseCodeColumn = new TableColumn<>("Course Code");
@@ -108,23 +139,80 @@ public class CoursePage {
         tableView.setPrefSize(500, 250);
         root.getChildren().add(tableView);
 
+        Rectangle codeBox = new Rectangle(190, 50);
+        codeBox.setFill(Color.ALICEBLUE);
+
+        Text codeLabel = new Text("Course Code:");
+        codeLabel.setStyle("-fx-font-size: 16px;");
+        stackPane.getChildren().addAll(codeBox, codeLabel);
+        stackPane.setLayoutX(15);
+        stackPane.setLayoutY(120);
+        root.getChildren().add(stackPane);
+
         TextField courseCode = new TextField();
+        courseCode.setPromptText("Enter the course code");
+        courseCode.setLayoutX(250);
         courseCode.setLayoutY(130);
         root.getChildren().add(courseCode);
 
+        Rectangle nameBox = new Rectangle(190, 50);
+        nameBox.setFill(Color.ALICEBLUE);
+
+        Text nameLabel = new Text("Enter the current year:");
+        nameLabel.setStyle("-fx-font-size: 16px;");
+        stackPane2.getChildren().addAll(nameBox, nameLabel);
+        stackPane2.setLayoutX(15);
+        stackPane2.setLayoutY(270);
+        root.getChildren().add(stackPane2);
+
         TextField courseName = new TextField();
+        courseName.setPromptText("Enter the course name");
+        courseName.setLayoutX(250);
         courseName.setLayoutY(280);
         root.getChildren().add(courseName);
 
+        Rectangle sectionNumBox = new Rectangle(190, 50);
+        sectionNumBox.setFill(Color.ALICEBLUE);
+
+        Text sectionNumLabel = new Text("Select the days available:");
+        sectionNumLabel.setStyle("-fx-font-size: 16px;");
+        stackPane3.getChildren().addAll(sectionNumBox, sectionNumLabel);
+        stackPane3.setLayoutX(15);
+        stackPane3.setLayoutY(400);
+        root.getChildren().add(stackPane3);
+
         TextField sectionNumber = new TextField();
-        sectionNumber.setLayoutY(430);
+        sectionNumber.setPromptText("Enter the section number");
+        sectionNumber.setLayoutX(250);
+        sectionNumber.setLayoutY(415);
         root.getChildren().add(sectionNumber);
 
+        //Image
+        Image logo = new Image("logo.png");
+        ImageView imageView1 = new ImageView(logo);
+        imageView1.setLayoutX(700);
+        imageView1.setLayoutY(380);
+        imageView1.setFitWidth(200);
+        imageView1.setFitHeight(200);
+
+        Text logoText = new Text("Office Hero");
+        logoText.setStyle("-fx-font-size: 36px;-fx-font-style: italic;");
+        logoText.setLayoutX(730);
+        logoText.setLayoutY(370);
+        root.getChildren().add(logoText);
+        root.getChildren().add(imageView1);
+
         Button submitButton = new Button("Submit");
+        submitButton.setLayoutX(250);
         submitButton.setLayoutY(570);
         root.getChildren().add(submitButton);
 
-        submitButton.setOnAction(_->{
+        Button backButton = new Button("Back to Home Page");
+        backButton.setLayoutX(30);
+        backButton.setLayoutY(30);
+        root.getChildren().add(backButton);
+
+        submitButton.setOnAction(e->{
             boolean isValid = true;
             String errorMessage = "";
 
@@ -162,6 +250,14 @@ public class CoursePage {
                 }
             } else {
                 showAlert("Error", errorMessage);
+            }
+        });
+
+        backButton.setOnAction(e -> {
+            try {
+                MainMenuPage.setActive(stage);  // Switch to NewScene
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
             }
         });
 

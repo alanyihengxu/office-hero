@@ -53,7 +53,7 @@ public class MainMenuPage {
         Button stackBt7 = new Button("Daily Report (PDF)");
 
         //Office Hours Button event on click
-        bt1.setOnAction(_-> {
+        bt1.setOnAction(e-> {
             try {
                 OfficeHourPage.setActive(stage);  // Switch to NewScene
             } catch (IOException ex) {
@@ -62,7 +62,7 @@ public class MainMenuPage {
         });
 
         //New Hours Button event on click
-        bt2.setOnAction(_-> {
+        bt2.setOnAction(e-> {
             try {
                 TimeSlotPage.setActive(stage);  // Switch to NewScene
             } catch (IOException ex) {
@@ -71,7 +71,7 @@ public class MainMenuPage {
         });
 
         //New Course Button event on click
-        bt3.setOnAction(_-> {
+        bt3.setOnAction(e-> {
             try {
                 CoursePage.setActive(stage);  // Switch to NewScene
             } catch (IOException ex) {

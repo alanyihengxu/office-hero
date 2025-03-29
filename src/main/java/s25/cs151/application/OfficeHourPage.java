@@ -145,7 +145,7 @@ public class OfficeHourPage {
         TableColumn<OfficeHourEntry, List<String>> daysColumn = new TableColumn<>("Days");
         daysColumn.setCellValueFactory(new PropertyValueFactory<>("days"));
 
-        daysColumn.setCellFactory(_ -> new TableCell<>() {
+        daysColumn.setCellFactory(e -> new TableCell<>() {
             @Override
             protected void updateItem(List<String> days, boolean empty) {
                 super.updateItem(days, empty);
@@ -271,7 +271,7 @@ public class OfficeHourPage {
         root.getChildren().add(backButton);
 
         //Submit button in action + checks for valid inputs
-        submitButton.setOnAction(_->{
+        submitButton.setOnAction(e->{
             boolean isValid = true;
             String errorMessage = "";
 
@@ -330,7 +330,7 @@ public class OfficeHourPage {
             }
         });
 
-        backButton.setOnAction(_ -> {
+        backButton.setOnAction(e -> {
             try {
                 MainMenuPage.setActive(stage);  // Switch to NewScene
             } catch (IOException ex) {

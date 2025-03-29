@@ -238,7 +238,7 @@ public class TimeSlotPage {
         root.getChildren().add(backButton);
 
         //Submit button in action + checks for valid inputs
-        submitButton.setOnAction(_->{
+        submitButton.setOnAction(e->{
             int hour1 = hourSelect1.getValue();
             int minutes1 = minuteSelect1.getValue();
             int hour2 = hourSelect2.getValue();
@@ -247,7 +247,7 @@ public class TimeSlotPage {
 
         });
 
-        backButton.setOnAction(_ -> {
+        backButton.setOnAction(e -> {
             try {
                 MainMenuPage.setActive(stage);  // Switch to NewScene
             } catch (IOException ex) {
