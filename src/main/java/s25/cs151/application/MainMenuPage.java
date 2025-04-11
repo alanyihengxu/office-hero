@@ -79,6 +79,15 @@ public class MainMenuPage {
             }
         });
 
+        //New Appointment Button event on click
+        bt4.setOnAction(e-> {
+            try {
+                AppointmentPage.setActive(stage);  // Switch to NewScene
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
         //First Hbox at the top containning the background color for the Main Menu Heading
         HBox title = new HBox();
         title.setBackground(new Background(new BackgroundFill(Color.KHAKI, null, null)));

@@ -30,6 +30,11 @@ public class Main extends Application {
         if (timeslotFile.createNewFile()) {
             System.out.println("Created new file: " + timeslotFile);
         }
+
+        File appointmentsFile = new File("data/appointments.csv");
+        if (appointmentsFile.createNewFile()) {
+            System.out.println("Created new file: " + appointmentsFile);
+        }
     }
 
 
