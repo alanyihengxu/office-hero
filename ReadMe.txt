@@ -1,11 +1,11 @@
 # Name of application: Office Hero
-# Version: 0.4
+# Version: 0.6
 
 # who did what:
-1. Alan Xu: Course Page Logic
-2. Minh Tran: Time Slot Page Logic
-3. Benny Wen: Course Page UI
-4. Octavio Valdivia: Time Slot Page UI
+1. Alan Xu: 
+2. Minh Tran: Appointment Submit Logic + Data Storage/Display
+3. Benny Wen: 
+4. Octavio Valdivia: 
 
 
 # Any other instruction that users need to know:
