@@ -171,6 +171,56 @@ public class EntrySort {
     }
 
     /**
+     * This method is used to read and sort the stored appointment data in the csv file,
+     *
+     *
+     * @param: String (filename)
+     * @return: List<AppointmentEntry>
+     *
+     */
+    public static List<AppointmentEntry> readAppointmentCSV(String filePath) {
+        List<AppointmentEntry> data = new ArrayList<>();
+
+        try (BufferedReader in = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = in.readLine()) != null) {
+                data.add(AppointmentEntry.fromCSV(line));
+            }
+
+            data.sort(Comparator
+                    .comparing(AppointmentEntry::getDate)
+                    .thenComparing(AppointmentEntry::getTimeSlot)
+            );
+
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to read or sort appointments.", e);
+        }
+
+        return data;
+    }
+
+    /**
+     * Takes the AppointmentEntry List from method above and output it to the
+     * existing csv file
+     *
+     * @param: List<AppointmentEntry>
+     * @return: void
+     *
+     */
+    public static void addSortedAppointmentData(List<AppointmentEntry> list) {
+        File file = new File("data/appointments.csv");
+        //Append the new entry to the CSV file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
+            for (AppointmentEntry entry : list) {
+                writer.write(entry.toCSV() + "\n");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    /**
      * Takes the OfficeHourEntry List from method above and output it to the
      * existing csv file
      *

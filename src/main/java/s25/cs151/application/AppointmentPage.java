@@ -1,7 +1,10 @@
 package s25.cs151.application;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -70,7 +73,7 @@ public class AppointmentPage {
             String line;
             while ((line = reader.readLine()) != null) {
                 CourseEntry entry = CourseEntry.fromCSV(line);
-                entries.add(entry.getCourseCode() + " Sec " + entry.getSectionNumber() + " - " + entry.getCourseName());
+                entries.add(entry.getCourseCode() + "-" + entry.getSectionNumber());
             }
         } catch(IOException ex) {
             showAlert("Error", "Failed to load data.");
@@ -108,6 +111,38 @@ public class AppointmentPage {
 
     public static void setActive(Stage stage) throws IOException {
         Pane root = new Pane();
+
+        //Appointments
+        TableView<AppointmentEntry> tableView = new TableView<>();
+
+        TableColumn<AppointmentEntry, String> nameCol = new TableColumn<>("Name");
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        TableColumn<AppointmentEntry, String> dateCol = new TableColumn<>("Date");
+        dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
+
+        TableColumn<AppointmentEntry, String> timeSlotCol = new TableColumn<>("Time Slot");
+        timeSlotCol.setCellValueFactory(new PropertyValueFactory<>("timeSlot"));
+
+        TableColumn<AppointmentEntry, String> courseCol = new TableColumn<>("Course");
+        courseCol.setCellValueFactory(new PropertyValueFactory<>("course"));
+
+        TableColumn<AppointmentEntry, String> reasonCol = new TableColumn<>("Reason");
+        reasonCol.setCellValueFactory(new PropertyValueFactory<>("reason"));
+
+        TableColumn<AppointmentEntry, String> commentCol = new TableColumn<>("Comment");
+        commentCol.setCellValueFactory(new PropertyValueFactory<>("comment"));
+
+        tableView.getColumns().addAll(nameCol, dateCol, timeSlotCol, courseCol, reasonCol, commentCol);
+
+        ObservableList<AppointmentEntry> appointments =
+                FXCollections.observableArrayList(EntrySort.readAppointmentCSV("data/appointments.csv"));
+        tableView.setItems(appointments);
+
+        tableView.setLayoutX(500);
+        tableView.setLayoutY(80);
+        tableView.setPrefSize(450, 250);
+        root.getChildren().add(tableView);
 
         //Student name
         TextField name = new TextField();
@@ -171,10 +206,50 @@ public class AppointmentPage {
         root.getChildren().add(backButton);
 
         //Submit button in action + checks for valid inputs
-        submitButton.setOnAction(e->{
+        submitButton.setOnAction(e -> {
+            boolean isValid = true;
+            String errorMessage = "";
 
+            String studentName = name.getText().trim();
+            if (studentName.isEmpty()) {
+                isValid = false;
+                errorMessage += "Student name is required.\n";
+            }
+
+            String appointmentDate = date.getValue().toString();
+            String selectedTimeSlot = timeSlot.getValue();
+            String selectedCourse = course.getValue();
+            String appointmentReason = reason.getText().trim().isEmpty() ? "N/A" : reason.getText().trim();
+            String appointmentComment = comment.getText().trim().isEmpty() ? "N/A" : comment.getText().trim();
+
+            if (isValid) {
+                AppointmentEntry newEntry = new AppointmentEntry(
+                        studentName,
+                        appointmentDate,
+                        selectedTimeSlot,
+                        selectedCourse,
+                        appointmentReason,
+                        appointmentComment
+                );
+
+                try {
+                    // Load, append, and sort appointments
+                    List<AppointmentEntry> current = EntrySort.readAppointmentCSV("data/appointments.csv");
+                    current.add(newEntry);
+                    EntrySort.addSortedAppointmentData(current);
+
+                    showAlert("Success", "Appointment successfully submitted.");
+                    setActive(stage); // reload to refresh table
+                } catch (IOException ex) {
+                    showAlert("Error", "Failed to save appointment.");
+                }
+            } else {
+                showAlert("Error", errorMessage);
+            }
         });
 
+
+        //back to home button
         backButton.setOnAction(e -> {
             try {
                 MainMenuPage.setActive(stage);  // Switch to NewScene
