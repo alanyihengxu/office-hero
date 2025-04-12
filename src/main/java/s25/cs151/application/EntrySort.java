@@ -27,7 +27,7 @@ public class EntrySort {
 
             //Setting new natural order for String for Semester
 
-            Comparator<String> customComparator = (o1, o2) -> {
+            Comparator<String> customComparator =   (o1, o2) -> {
                 //Spring is the 1st semester (no need to swap)
                 if ("Spring".equals(o1)) {
                     return -1;
@@ -189,7 +189,22 @@ public class EntrySort {
 
             data.sort(Comparator
                     .comparing(AppointmentEntry::getDate)
-                    .thenComparing(AppointmentEntry::getTimeSlot)
+                    .thenComparing((a1,a2)->{
+                        TimeSlotEntry t1 = TimeSlotEntry.fromString(a1.getTimeSlot());
+                        TimeSlotEntry t2 = TimeSlotEntry.fromString(a2.getTimeSlot());
+
+                            int comparison = Integer.compare(t1.getFromHour(), t2.getFromHour());
+                            if (comparison != 0) { return comparison;}
+
+                            comparison = Integer.compare(t1.getFromMinute(), t2.getFromMinute());
+                            if (comparison != 0) { return comparison;}
+
+                            comparison = Integer.compare(t1.getFromHour(), t2.getFromHour());
+                            if (comparison != 0) { return comparison;}
+
+                            return Integer.compare(t1.getToMinute(), t2.getToMinute());
+            })
+
             );
 
         } catch (IOException e) {

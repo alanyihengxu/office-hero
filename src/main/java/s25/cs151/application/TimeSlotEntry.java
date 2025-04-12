@@ -13,6 +13,7 @@ public class TimeSlotEntry {
         this.toMinute = toMinute;
     }
 
+
     public int getFromHour() {
         return fromHour;
     }
@@ -28,6 +29,7 @@ public class TimeSlotEntry {
     public int getToMinute() {
         return toMinute;
     }
+
 
    //Compare method to check for duplicates
     public boolean compares(TimeSlotEntry other) {
@@ -52,4 +54,23 @@ public class TimeSlotEntry {
 
         return new TimeSlotEntry(fromHour, fromMinute, toHour, toMinute);
     }
+
+    //parse  from the format "HH:MM - HH:MM"
+    public static TimeSlotEntry fromString(String str) {
+        String[] parts = str.split(" - ");
+        if (parts.length != 2) {
+            throw new IllegalArgumentException("Invalid time slot format: " + str);
+        }
+
+        String[] fromParts = parts[0].split(":");
+        String[] toParts = parts[1].split(":");
+
+        int fromHour = Integer.parseInt(fromParts[0]);
+        int fromMinute = Integer.parseInt(fromParts[1]);
+        int toHour = Integer.parseInt(toParts[0]);
+        int toMinute = Integer.parseInt(toParts[1]);
+
+        return new TimeSlotEntry(fromHour, fromMinute, toHour, toMinute);
+    }
+
 }
