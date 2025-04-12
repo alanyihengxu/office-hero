@@ -206,7 +206,7 @@ public class TimeSlotPage {
         root.getChildren().add(backButton);
 
         //Submit button in action + checks for valid inputs
-        submitButton.setOnAction(_ -> {
+        submitButton.setOnAction(e -> {
             boolean isValid = true;
             String errorMessage = "";
 
@@ -238,7 +238,7 @@ public class TimeSlotPage {
         });
 
 
-        backButton.setOnAction(_ -> {
+        backButton.setOnAction(e -> {
             try {
                 MainMenuPage.setActive(stage);  // Switch to NewScene
             } catch (IOException ex) {

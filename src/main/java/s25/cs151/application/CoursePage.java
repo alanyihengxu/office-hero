@@ -212,7 +212,7 @@ public class CoursePage {
         backButton.setLayoutY(30);
         root.getChildren().add(backButton);
 
-        submitButton.setOnAction(_->{
+        submitButton.setOnAction(e->{
             boolean isValid = true;
             String errorMessage = "";
 
@@ -253,7 +253,7 @@ public class CoursePage {
             }
         });
 
-        backButton.setOnAction(_ -> {
+        backButton.setOnAction(e -> {
             try {
                 MainMenuPage.setActive(stage);  // Switch to NewScene
             } catch (IOException ex) {
