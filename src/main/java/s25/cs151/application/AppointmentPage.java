@@ -42,20 +42,6 @@ public class AppointmentPage {
         alert.showAndWait();
     }
 
-    /**
-     * This method saves a user's office hour entry into a flat file.
-     *
-     * @param: OfficeHourEntry entry
-     * @return: Void
-     */
-
-    private static void saveToFile(OfficeHourEntry entry) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("data/appointments.csv",true))) {
-            writer.write(entry.toString());
-            writer.newLine(); // Add a new line after each entry
-        }
-    }
-
 
     private static List<String> loadOfficeHours() {
         List<String> entries = new LinkedList<>();
@@ -165,7 +151,12 @@ public class AppointmentPage {
         TableColumn<AppointmentEntry, String> commentCol = new TableColumn<>("Comment");
         commentCol.setCellValueFactory(new PropertyValueFactory<>("comment"));
 
-        tableView.getColumns().addAll(nameCol, dateCol, timeSlotCol, courseCol, reasonCol, commentCol);
+        tableView.getColumns().add(nameCol);
+        tableView.getColumns().add(dateCol);
+        tableView.getColumns().add(timeSlotCol);
+        tableView.getColumns().add(courseCol);
+        tableView.getColumns().add(reasonCol);
+        tableView.getColumns().add(commentCol);
 
         ObservableList<AppointmentEntry> appointments =
                 FXCollections.observableArrayList(EntrySort.readAppointmentCSV("data/appointments.csv"));
@@ -224,7 +215,8 @@ public class AppointmentPage {
         //Time slot selection
         ComboBox<String> timeSlot = new ComboBox<>();
         timeSlot.getItems().addAll(loadTimeSlots());
-        timeSlot.setValue(timeSlot.getItems().getFirst());
+        if (!timeSlot.getItems().isEmpty())
+            timeSlot.setValue(timeSlot.getItems().getFirst());
         timeSlot.setLayoutX(250);
         timeSlot.setLayoutY(270);
         root.getChildren().add(timeSlot);
@@ -242,7 +234,8 @@ public class AppointmentPage {
         //Time slot selection
         ComboBox<String> course = new ComboBox<>();
         course.getItems().addAll(loadCourses());
-        course.setValue(course.getItems().getFirst());
+        if (!course.getItems().isEmpty())
+            course.setValue(course.getItems().getFirst());
         course.setLayoutX(250);
         course.setLayoutY(350);
         root.getChildren().add(course);
@@ -313,9 +306,26 @@ public class AppointmentPage {
                 errorMessage += "Student name is required.\n";
             }
 
-            String appointmentDate = date.getValue().toString();
+            String appointmentDate = null;
+            if (date.getValue() == null) {
+                isValid = false;
+                errorMessage += "Date is required.\n";
+            } else {
+                appointmentDate = date.getValue().toString();
+            }
+
             String selectedTimeSlot = timeSlot.getValue();
+            if (selectedTimeSlot == null) {
+                isValid = false;
+                errorMessage += "Time slot is required.\n";
+            }
+
             String selectedCourse = course.getValue();
+            if (selectedCourse == null) {
+                isValid = false;
+                errorMessage += "Course is required.\n";
+            }
+
             String appointmentReason = reason.getText().trim().isEmpty() ? "N/A" : reason.getText().trim();
             String appointmentComment = comment.getText().trim().isEmpty() ? "N/A" : comment.getText().trim();
 
@@ -336,7 +346,7 @@ public class AppointmentPage {
                     EntrySort.addSortedAppointmentData(current);
 
                     showAlert("Success", "Appointment successfully submitted.");
-                    setActive(stage); // reload to refresh table
+                    MainMenuPage.setActive(stage);  // Switch to NewScene
                 } catch (IOException ex) {
                     showAlert("Error", "Failed to save appointment.");
                 }
