@@ -92,10 +92,12 @@ public class AppointmentPage {
 
     /**
      * This method makes it so a stage that becomes active.
-     * This stage houses the office hour page which allows users to
-     * 1.Select Semester
-     * 2.Enter current year
-     * 3.Select days for office hours
+     * This stage houses the appointment page which allows users to
+     * 1.Enter student's name
+     * 2.Choose schedule date
+     * 3.Select time slot
+     * 4.Select course
+     * 5.Enter reason and comment optionally
      * @param: Stage (stage object)
      * @return: Void
      *
