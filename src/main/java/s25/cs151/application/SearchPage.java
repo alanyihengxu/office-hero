@@ -13,6 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.collections.transformation.SortedList;
 
 import java.io.IOException;
 
@@ -102,10 +103,6 @@ public class SearchPage {
         tableView.getColumns().add(reasonCol);
         tableView.getColumns().add(commentCol);
 
-        ObservableList<AppointmentEntry> appointments =
-                FXCollections.observableArrayList(EntrySort.readAppointmentCSV("data/appointments.csv").reversed()); // Reverse sorting so it is descending
-        tableView.setItems(appointments);
-
         tableView.setLayoutX(15);
         tableView.setLayoutY(180);
         tableView.setPrefSize(600, 400);
@@ -131,10 +128,10 @@ public class SearchPage {
         root.getChildren().add(name);
 
         //Search button
-        Button submitButton = new Button("Search");
-        submitButton.setLayoutX(500);
-        submitButton.setLayoutY(110);
-        root.getChildren().add(submitButton);
+        Button searchButton = new Button("Search");
+        searchButton.setLayoutX(500);
+        searchButton.setLayoutY(110);
+        root.getChildren().add(searchButton);
 
         //Image
         Image logo = new Image("logo.png");
@@ -165,6 +162,42 @@ public class SearchPage {
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
+        });
+
+
+        searchButton.setOnAction(e -> {
+            String searchName = name.getText().trim().toLowerCase();
+            if (searchName.isEmpty()) {
+                showAlert("Error", "Please enter a student's name.");
+                return;
+            }
+
+            // Get all appointments
+            ObservableList<AppointmentEntry> appointments = FXCollections.observableArrayList(
+                    EntrySort.readAppointmentCSV("data/appointments.csv")
+            );
+
+            // Filter by student name
+            ObservableList<AppointmentEntry> filtered = appointments.filtered(
+                    appt -> appt.getName().toLowerCase().contains(searchName)
+            );
+
+            // Alert message
+            if (filtered.isEmpty()) {
+                showAlert("Info", "No appointments found for that student.");
+                return;
+            }
+
+            //Sort
+            SortedList<AppointmentEntry> sortedFiltered = new SortedList<>(filtered);
+            sortedFiltered.setComparator((appt1, appt2) -> {
+                int dateCompare = appt2.getDate().compareTo(appt1.getDate());
+                if (dateCompare != 0) {
+                    return dateCompare;
+                }
+                return appt2.getTimeSlot().compareTo(appt1.getTimeSlot());
+            });
+            tableView.setItems(sortedFiltered);
         });
 
         Scene scene = new Scene(root, 1000, 600);
