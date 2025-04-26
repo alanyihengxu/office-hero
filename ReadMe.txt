@@ -2,9 +2,9 @@
 # Version: 0.6
 
 # who did what:
-1. Alan Xu: Page Navigation, Basic UI
-2. Minh Tran: Appointment Submit Logic + Data Storage/Display
-3. Benny Wen: Appointment Page UI
+1. Alan Xu: Page Navigation, UI
+2. Minh Tran: Quality Assurance
+3. Benny Wen: Search Office Hour Schedules
 4. Octavio Valdivia: Delete Office Hour Schedules
 
 

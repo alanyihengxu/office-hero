@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class DeleteSchedules {
 
-    public void deleteSearch(String filepath, String nameToRemove){
+    public void deleteSearch(String filepath, AppointmentEntry toRemove){
         String tempFile = "temp.txt";
         File oldFile = new File(filepath);
         File newFile = new File(tempFile);
@@ -35,7 +35,7 @@ public class DeleteSchedules {
                     comment = content[5];
                 }
 
-                if(!name.equals(nameToRemove)){
+                if(!(name.equals(toRemove.getName()) && date.equals(toRemove.getDate()) && timeSlot.equals(toRemove.getTimeSlot()) && course.equals(toRemove.getCourse()) && reason.equals(toRemove.getReason()) && comment.equals(toRemove.getComment()))){
                     pw.println(name + "," + date + "," + timeSlot + ","
                                 + course + "," + reason + "," + comment);
                 }
@@ -49,7 +49,7 @@ public class DeleteSchedules {
 
         }
         catch (Exception e) {
-            JOptionPane.showMessageDialog(null,"FilenotFound");
+            JOptionPane.showMessageDialog(null,"FileNotFound");
         }
     }
 }

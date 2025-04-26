@@ -206,14 +206,18 @@ public class SearchPage {
         });
 
         deleteButton.setOnAction(e -> {
-            String searchName = name.getText().trim();
-            if (searchName.isEmpty()) {
-                showAlert("Error", "Please enter a student's name.");
+            AppointmentEntry deleteItem = tableView.getSelectionModel().getSelectedItem();
+            int index = tableView.getSelectionModel().getSelectedIndex();
+            if (deleteItem == null) {
+                showAlert("Error", "Please select an appointment.");
                 return;
-            }
-            else{
+            } else {
                 DeleteSchedules delete1 = new DeleteSchedules();
-                delete1.deleteSearch("data/appointments.csv",searchName);
+                delete1.deleteSearch("data/appointments.csv",deleteItem);
+                ObservableList<AppointmentEntry> filtered = tableView.getItems().filtered(
+                        appt -> appt != deleteItem
+                );
+                tableView.setItems(filtered);
             }
         });
 

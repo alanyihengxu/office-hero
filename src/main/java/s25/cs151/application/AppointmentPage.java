@@ -237,7 +237,7 @@ public class AppointmentPage {
         ComboBox<String> course = new ComboBox<>();
         course.getItems().addAll(loadCourses());
         if (!course.getItems().isEmpty())
-           //course.setValue(course.getItems().getFirst());
+           course.setValue(course.getItems().get(0));
 
         course.setLayoutX(250);
         course.setLayoutY(350);
