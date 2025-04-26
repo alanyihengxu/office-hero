@@ -133,6 +133,11 @@ public class SearchPage {
         searchButton.setLayoutY(110);
         root.getChildren().add(searchButton);
 
+        Button deleteButton = new Button("Delete");
+        deleteButton.setLayoutX(560);
+        deleteButton.setLayoutY(110);
+        root.getChildren().add(deleteButton);
+
         //Image
         Image logo = new Image("logo.png");
         ImageView imageView1 = new ImageView(logo);
@@ -198,6 +203,18 @@ public class SearchPage {
                 return appt2.getTimeSlot().compareTo(appt1.getTimeSlot());
             });
             tableView.setItems(sortedFiltered);
+        });
+
+        deleteButton.setOnAction(e -> {
+            String searchName = name.getText().trim();
+            if (searchName.isEmpty()) {
+                showAlert("Error", "Please enter a student's name.");
+                return;
+            }
+            else{
+                DeleteSchedules delete1 = new DeleteSchedules();
+                delete1.deleteSearch("data/appointments.csv",searchName);
+            }
         });
 
         Scene scene = new Scene(root, 1000, 600);
