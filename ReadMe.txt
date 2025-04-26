@@ -5,7 +5,7 @@
 1. Alan Xu: Page Navigation, Basic UI
 2. Minh Tran: Appointment Submit Logic + Data Storage/Display
 3. Benny Wen: Appointment Page UI
-4. Octavio Valdivia: Sorting Appointment Data
+4. Octavio Valdivia: Delete Office Hour Schedules
 
 
 # Any other instruction that users need to know:
