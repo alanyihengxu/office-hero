@@ -218,7 +218,7 @@ public class AppointmentPage {
         ComboBox<String> timeSlot = new ComboBox<>();
         timeSlot.getItems().addAll(loadTimeSlots());
         if (!timeSlot.getItems().isEmpty())
-            timeSlot.setValue(timeSlot.getItems().getFirst());
+            timeSlot.setValue(timeSlot.getItems().get(0));
         timeSlot.setLayoutX(250);
         timeSlot.setLayoutY(270);
         root.getChildren().add(timeSlot);
@@ -237,7 +237,8 @@ public class AppointmentPage {
         ComboBox<String> course = new ComboBox<>();
         course.getItems().addAll(loadCourses());
         if (!course.getItems().isEmpty())
-            course.setValue(course.getItems().getFirst());
+           //course.setValue(course.getItems().getFirst());
+
         course.setLayoutX(250);
         course.setLayoutY(350);
         root.getChildren().add(course);
