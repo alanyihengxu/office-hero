@@ -1,4 +1,9 @@
-package s25.cs151.application;
+package s25.cs151.application.controller;
+import s25.cs151.application.model.AppointmentEntry;
+import s25.cs151.application.model.CourseEntry;
+import s25.cs151.application.model.OfficeHourEntry;
+import s25.cs151.application.model.TimeSlotEntry;
+
 import java.util.*;
 import java.io.*;
 import java.util.Comparator;

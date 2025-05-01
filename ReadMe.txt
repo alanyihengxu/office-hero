@@ -1,5 +1,5 @@
 # Name of application: Office Hero
-# Version: 0.6
+# Version: 0.8
 
 # who did what:
 1. Alan Xu: Page Navigation, UI

@@ -1,4 +1,4 @@
-package s25.cs151.application;
+package s25.cs151.application.view;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,6 +14,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import s25.cs151.application.controller.EntrySort;
+import s25.cs151.application.model.TimeSlotEntry;
 
 
 import java.io.*;

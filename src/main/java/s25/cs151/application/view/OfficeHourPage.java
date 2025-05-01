@@ -1,4 +1,4 @@
-package s25.cs151.application;
+package s25.cs151.application.view;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,6 +13,8 @@ import javafx.scene.text.Text;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.control.cell.PropertyValueFactory;
+import s25.cs151.application.controller.EntrySort;
+import s25.cs151.application.model.OfficeHourEntry;
 
 import java.io.IOException;
 import java.util.*;

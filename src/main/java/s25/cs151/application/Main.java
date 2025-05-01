@@ -2,6 +2,7 @@ package s25.cs151.application;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import s25.cs151.application.view.MainMenuPage;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package s25.cs151.application;
+package s25.cs151.application.view;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -83,6 +83,15 @@ public class MainMenuPage {
         bt4.setOnAction(e-> {
             try {
                 AppointmentPage.setActive(stage);  // Switch to NewScene
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        //Search Appointment Button event on click
+        bt5.setOnAction(e-> {
+            try {
+                EditPage.setActive(stage);  // Switch to NewScene
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
