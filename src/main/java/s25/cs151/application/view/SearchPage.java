@@ -1,7 +1,6 @@
 package s25.cs151.application.view;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -13,35 +12,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.collections.transformation.SortedList;
-import s25.cs151.application.controller.DeleteSchedules;
-import s25.cs151.application.controller.EntrySort;
+import s25.cs151.application.controller.SearchController;
 import s25.cs151.application.model.entry.AppointmentEntry;
 
 import java.io.IOException;
 
 
 public class SearchPage {
-    /**
-     * This method is a helper method for displaying alerts; the default alert
-     * type is error.
-     *
-     * @param: String title, String message
-     * @return: Void
-     *
-     */
-
-    private static void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-
-        if (title.equals("Success"))
-            alert.setAlertType(Alert.AlertType.INFORMATION);
-
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 
     /**
      * This method makes it so a stage that becomes active.
@@ -162,63 +139,8 @@ public class SearchPage {
         backButton.setLayoutY(30);
         root.getChildren().add(backButton);
 
+        SearchController.attachhandlers(name,tableView,searchButton,backButton, deleteButton, stage);
 
-        //back to home button
-        backButton.setOnAction(e -> {
-            MainMenuPage.setActive(stage);  // Switch to NewScene
-        });
-
-
-        searchButton.setOnAction(e -> {
-            String searchName = name.getText().trim().toLowerCase();
-            if (searchName.isEmpty()) {
-                showAlert("Error", "Please enter a student's name.");
-                return;
-            }
-
-            // Get all appointments
-            ObservableList<AppointmentEntry> appointments = FXCollections.observableArrayList(
-                    EntrySort.readAppointmentCSV("data/appointments.csv")
-            );
-
-            // Filter by student name
-            ObservableList<AppointmentEntry> filtered = appointments.filtered(
-                    appt -> appt.getName().toLowerCase().contains(searchName)
-            );
-
-            // Alert message
-            if (filtered.isEmpty()) {
-                showAlert("Info", "No appointments found for that student.");
-                return;
-            }
-
-            //Sort
-            SortedList<AppointmentEntry> sortedFiltered = new SortedList<>(filtered);
-            sortedFiltered.setComparator((appt1, appt2) -> {
-                int dateCompare = appt2.getDate().compareTo(appt1.getDate());
-                if (dateCompare != 0) {
-                    return dateCompare;
-                }
-                return appt2.getTimeSlot().compareTo(appt1.getTimeSlot());
-            });
-            tableView.setItems(sortedFiltered);
-        });
-
-        deleteButton.setOnAction(e -> {
-            AppointmentEntry deleteItem = tableView.getSelectionModel().getSelectedItem();
-            int index = tableView.getSelectionModel().getSelectedIndex();
-            if (deleteItem == null) {
-                showAlert("Error", "Please select an appointment.");
-                return;
-            } else {
-                DeleteSchedules delete1 = new DeleteSchedules();
-                delete1.deleteSearch("data/appointments.csv",deleteItem);
-                ObservableList<AppointmentEntry> filtered = tableView.getItems().filtered(
-                        appt -> appt != deleteItem
-                );
-                tableView.setItems(filtered);
-            }
-        });
 
         Scene scene = new Scene(root, 1000, 600);
         stage.setScene(scene);
