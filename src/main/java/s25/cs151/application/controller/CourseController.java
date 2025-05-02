@@ -1,21 +1,30 @@
 package s25.cs151.application.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import s25.cs151.application.model.CourseEntry;
+import s25.cs151.application.controller.EntrySort;
 import s25.cs151.application.view.MainMenuPage;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.List;
 
 public class CourseController {
 
-    public static void attachHandlers(Stage stage, TextField courseCode, TextField courseName, TextField sectionNumber, Button submitButton, Button backButton) {
+    public static void attachHandlers(Stage stage, TextField courseCode, TextField courseName, TextField sectionNumber,
+                                      Button submitButton, Button backButton) {
+
         submitButton.setOnAction(e -> handleSubmit(stage, courseCode, courseName, sectionNumber));
-        backButton.setOnAction(e -> {
-            MainMenuPage.setActive(stage);
-        });
+        backButton.setOnAction(e -> MainMenuPage.setActive(stage));
+    }
+
+    public static ObservableList<CourseEntry> loadCourses() {
+        return FXCollections.observableArrayList(
+                EntrySort.readCourseCSV("data/courses.csv")
+        );
     }
 
     private static void handleSubmit(Stage stage, TextField courseCode, TextField courseName, TextField sectionNumber) {
@@ -76,7 +85,7 @@ public class CourseController {
 
     private static void showAlert(String title, String message) {
         javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
-        if (title.equals("Success")) {
+        if ("Success".equals(title)) {
             alert.setAlertType(javafx.scene.control.Alert.AlertType.INFORMATION);
         }
         alert.setTitle(title);

@@ -1,5 +1,7 @@
 package s25.cs151.application.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import s25.cs151.application.model.OfficeHourEntry;
@@ -16,13 +18,26 @@ public class OfficeHourController {
     public static void attachHandlers(Stage stage, ComboBox<String> semesterBox, TextField yearField,
                                       List<CheckBox> dayCheckboxes, Button submitButton, Button backButton) {
 
-        submitButton.setOnAction(e -> handleSubmit(stage, semesterBox, yearField, dayCheckboxes));
+        submitButton.setOnAction(e -> {
+            try {
+                handleSubmit(stage, semesterBox, yearField, dayCheckboxes);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         backButton.setOnAction(e -> {
             MainMenuPage.setActive(stage);
         });
     }
 
-    private static void handleSubmit(Stage stage, ComboBox<String> semesterBox, TextField yearField, List<CheckBox> dayCheckboxes) {
+    public static ObservableList<OfficeHourEntry> loadOfficeHours() {
+        return FXCollections.observableArrayList(
+                EntrySort.readOfficeHourCSV("data/office_hours.csv")
+        );
+    }
+
+
+    private static void handleSubmit(Stage stage, ComboBox<String> semesterBox, TextField yearField, List<CheckBox> dayCheckboxes) throws IOException {
         boolean isValid = true;
         StringBuilder errorMessage = new StringBuilder();
 

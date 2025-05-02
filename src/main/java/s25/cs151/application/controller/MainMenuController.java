@@ -18,28 +18,42 @@ public class MainMenuController {
             Button searchAppointmentsButton,
             Button dailyReportButton
     ) {
-        officeHoursButton.setOnAction(e -> handleOfficeHours(stage));
-        newHoursButton.setOnAction(e -> handleNewHours(stage));
-        newCourseButton.setOnAction(e -> handleNewCourse(stage));
+        officeHoursButton.setOnAction(e -> {
+            try {
+                handleOfficeHours(stage);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        newHoursButton.setOnAction(e -> {
+            try {
+                handleNewHours(stage);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        newCourseButton.setOnAction(e -> {
+            try {
+                handleNewCourse(stage);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         newAppointmentButton.setOnAction(e -> handleNewAppointment(stage));
         editAppointmentButton.setOnAction(e -> handleEditAppointment(stage));
         searchAppointmentsButton.setOnAction(e -> handleSearchAppointments(stage));
         dailyReportButton.setOnAction(e -> handleDailyReport(stage));
     }
 
-    private static void handleOfficeHours(Stage stage) {
+    private static void handleOfficeHours(Stage stage) throws IOException {
         OfficeHourPage.setActive(stage);
     }
 
-    private static void handleNewHours(Stage stage) {
-        try {
-            TimeSlotPage.setActive(stage);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    private static void handleNewHours(Stage stage) throws IOException {
+        TimeSlotPage.setActive(stage);
     }
 
-    private static void handleNewCourse(Stage stage) {
+    private static void handleNewCourse(Stage stage) throws IOException {
         CoursePage.setActive(stage);
     }
 

@@ -98,11 +98,7 @@ public class EditController {
 
     // Return to Main Menu
     public static void mainMenu(Stage stage) {
-        try {
-            MainMenuPage.setActive(stage);  // Switch to NewScene
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+        MainMenuPage.setActive(stage);  // Switch to NewScene
     }
 
     //Sort initial appointments

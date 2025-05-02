@@ -165,11 +165,7 @@ public class SearchPage {
 
         //back to home button
         backButton.setOnAction(e -> {
-            try {
-                MainMenuPage.setActive(stage);  // Switch to NewScene
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
+            MainMenuPage.setActive(stage);  // Switch to NewScene
         });
 
 
