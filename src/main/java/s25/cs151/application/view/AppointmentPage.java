@@ -14,10 +14,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import s25.cs151.application.controller.EntrySort;
-import s25.cs151.application.model.AppointmentEntry;
-import s25.cs151.application.model.CourseEntry;
-import s25.cs151.application.model.OfficeHourEntry;
-import s25.cs151.application.model.TimeSlotEntry;
+import s25.cs151.application.model.entry.AppointmentEntry;
+import s25.cs151.application.model.entry.CourseEntry;
+import s25.cs151.application.model.entry.OfficeHourEntry;
+import s25.cs151.application.model.entry.TimeSlotEntry;
 
 import java.io.*;
 import java.time.LocalDate;

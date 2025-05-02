@@ -1,4 +1,4 @@
-package s25.cs151.application.model;
+package s25.cs151.application.model.entry;
 import java.util.List;
 
 public class OfficeHourEntry {

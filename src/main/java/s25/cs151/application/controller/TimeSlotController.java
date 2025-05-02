@@ -5,14 +5,24 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.stage.Stage;
-import s25.cs151.application.model.TimeSlotEntry;
+import s25.cs151.application.model.sort.EntrySort;
+import s25.cs151.application.model.entry.TimeSlotEntry;
+import s25.cs151.application.model.sort.TimeSlotEntrySort;
 import s25.cs151.application.view.MainMenuPage;
-import s25.cs151.application.controller.EntrySort;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
 public class TimeSlotController {
+
+    private static final String TIMESLOT_FILE = "data/semester_time_slots.csv";
+
+    public static ObservableList<TimeSlotEntry> loadTimeSlots() {
+        EntrySort<TimeSlotEntry> reader = new TimeSlotEntrySort();
+        return FXCollections.observableArrayList(reader.readAndSort(TIMESLOT_FILE));
+    }
 
     public static void attachHandlers(Stage stage, Spinner<Integer> fromHour, Spinner<Integer> fromMinute,
                                       Spinner<Integer> toHour, Spinner<Integer> toMinute,
@@ -22,15 +32,8 @@ public class TimeSlotController {
         backButton.setOnAction(e -> MainMenuPage.setActive(stage));
     }
 
-    public static ObservableList<TimeSlotEntry> loadTimeSlots() {
-        return FXCollections.observableArrayList(
-                EntrySort.readTimeSlotCSV("data/semester_time_slots.csv")
-        );
-    }
-
     private static void handleSubmit(Stage stage, Spinner<Integer> fromHour, Spinner<Integer> fromMinute,
                                      Spinner<Integer> toHour, Spinner<Integer> toMinute) {
-
         int fh = fromHour.getValue();
         int fm = fromMinute.getValue();
         int th = toHour.getValue();
@@ -43,11 +46,26 @@ public class TimeSlotController {
 
         TimeSlotEntry newEntry = new TimeSlotEntry(fh, fm, th, tm);
 
-        List<TimeSlotEntry> current = EntrySort.readTimeSlotCSV("data/semester_time_slots.csv");
-        current.add(newEntry);
-        EntrySort.addSortedTimeSlotData(current);
-        showAlert("Success", "Time slot successfully added.");
-        MainMenuPage.setActive(stage);
+        try {
+            List<TimeSlotEntry> slots = new TimeSlotEntrySort().readAndSort(TIMESLOT_FILE);
+            slots.add(newEntry);
+            saveTimeSlots(slots);
+            showAlert("Success", "Time slot successfully added.");
+            MainMenuPage.setActive(stage);
+        } catch (Exception ex) {
+            showAlert("Error", "Failed to save time slot.");
+        }
+    }
+
+    private static void saveTimeSlots(List<TimeSlotEntry> slots) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(TIMESLOT_FILE, false))) {
+            for (TimeSlotEntry entry : slots) {
+                writer.write(entry.toString());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to save time slots.", e);
+        }
     }
 
     private static void showAlert(String title, String message) {

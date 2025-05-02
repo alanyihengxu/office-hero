@@ -5,26 +5,27 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import s25.cs151.application.model.CourseEntry;
-import s25.cs151.application.controller.EntrySort;
+import s25.cs151.application.model.entry.CourseEntry;
+import s25.cs151.application.model.sort.CourseEntrySort;
+import s25.cs151.application.model.sort.EntrySort;
 import s25.cs151.application.view.MainMenuPage;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 
 public class CourseController {
 
-    public static void attachHandlers(Stage stage, TextField courseCode, TextField courseName, TextField sectionNumber,
-                                      Button submitButton, Button backButton) {
-
-        submitButton.setOnAction(e -> handleSubmit(stage, courseCode, courseName, sectionNumber));
-        backButton.setOnAction(e -> MainMenuPage.setActive(stage));
-    }
+    private static final String COURSE_FILE = "data/courses.csv";
 
     public static ObservableList<CourseEntry> loadCourses() {
-        return FXCollections.observableArrayList(
-                EntrySort.readCourseCSV("data/courses.csv")
-        );
+        EntrySort<CourseEntry> reader = new CourseEntrySort();
+        return FXCollections.observableArrayList(reader.readAndSort(COURSE_FILE));
+    }
+
+    public static void attachHandlers(Stage stage, TextField courseCode, TextField courseName, TextField sectionNumber,
+                                      Button submitButton, Button backButton) {
+        submitButton.setOnAction(e -> handleSubmit(stage, courseCode, courseName, sectionNumber));
+        backButton.setOnAction(e -> MainMenuPage.setActive(stage));
     }
 
     private static void handleSubmit(Stage stage, TextField courseCode, TextField courseName, TextField sectionNumber) {
@@ -52,35 +53,34 @@ public class CourseController {
             );
 
             try {
-                if (isDuplicate(newEntry)) {
-                    showAlert("Error", "This course entry already exists.");
-                } else {
-                    saveCourse(newEntry);
-                    showAlert("Success", "Course successfully added.");
-                    MainMenuPage.setActive(stage);
+                List<CourseEntry> courses = new CourseEntrySort().readAndSort(COURSE_FILE);
+                for (CourseEntry existing : courses) {
+                    if (newEntry.compares(existing)) {
+                        showAlert("Error", "This course entry already exists.");
+                        return;
+                    }
                 }
-            } catch (IOException ex) {
-                showAlert("Error", "Failed to save data.");
+                courses.add(newEntry);
+                saveCourses(courses);
+                showAlert("Success", "Course successfully added.");
+                MainMenuPage.setActive(stage);
+            } catch (Exception ex) {
+                showAlert("Error", "Failed to save course.");
             }
         } else {
             showAlert("Error", errorMessage.toString());
         }
     }
 
-    private static boolean isDuplicate(CourseEntry newEntry) throws IOException {
-        List<CourseEntry> courses = EntrySort.readCourseCSV("data/courses.csv");
-        for (CourseEntry existing : courses) {
-            if (newEntry.compares(existing)) {
-                return true;
+    private static void saveCourses(List<CourseEntry> courses) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(COURSE_FILE, false))) {
+            for (CourseEntry entry : courses) {
+                writer.write(entry.toString());
+                writer.newLine();
             }
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to save course entries.", e);
         }
-        return false;
-    }
-
-    private static void saveCourse(CourseEntry entry) throws IOException {
-        List<CourseEntry> courses = EntrySort.readCourseCSV("data/courses.csv");
-        courses.add(entry);
-        EntrySort.addSortedCourseData(courses);
     }
 
     private static void showAlert(String title, String message) {

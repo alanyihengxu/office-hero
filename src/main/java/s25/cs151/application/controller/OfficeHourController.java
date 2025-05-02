@@ -4,40 +4,34 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import s25.cs151.application.model.OfficeHourEntry;
+import s25.cs151.application.model.sort.EntrySort;
+import s25.cs151.application.model.entry.OfficeHourEntry;
+import s25.cs151.application.model.sort.OfficeHourEntrySort;
 import s25.cs151.application.view.MainMenuPage;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static s25.cs151.application.controller.EntrySort.*;
-
 public class OfficeHourController {
+
+    private static final String OFFICEHOUR_FILE = "data/office_hours.csv";
+
+    public static ObservableList<OfficeHourEntry> loadOfficeHours() {
+        EntrySort<OfficeHourEntry> reader = new OfficeHourEntrySort();
+        return FXCollections.observableArrayList(reader.readAndSort(OFFICEHOUR_FILE));
+    }
 
     public static void attachHandlers(Stage stage, ComboBox<String> semesterBox, TextField yearField,
                                       List<CheckBox> dayCheckboxes, Button submitButton, Button backButton) {
-
-        submitButton.setOnAction(e -> {
-            try {
-                handleSubmit(stage, semesterBox, yearField, dayCheckboxes);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-        backButton.setOnAction(e -> {
-            MainMenuPage.setActive(stage);
-        });
+        submitButton.setOnAction(e -> handleSubmit(stage, semesterBox, yearField, dayCheckboxes));
+        backButton.setOnAction(e -> MainMenuPage.setActive(stage));
     }
 
-    public static ObservableList<OfficeHourEntry> loadOfficeHours() {
-        return FXCollections.observableArrayList(
-                EntrySort.readOfficeHourCSV("data/office_hours.csv")
-        );
-    }
-
-
-    private static void handleSubmit(Stage stage, ComboBox<String> semesterBox, TextField yearField, List<CheckBox> dayCheckboxes) throws IOException {
+    private static void handleSubmit(Stage stage, ComboBox<String> semesterBox, TextField yearField,
+                                     List<CheckBox> dayCheckboxes) {
         boolean isValid = true;
         StringBuilder errorMessage = new StringBuilder();
 
@@ -49,7 +43,7 @@ public class OfficeHourController {
             errorMessage.append("Please select a semester.\n");
         }
 
-        if (yearText.length() != 4 || !yearText.matches("\\d{4}")) {
+        if (!yearText.matches("\\d{4}")) {
             isValid = false;
             errorMessage.append("Year must be exactly 4 digits.\n");
         }
@@ -68,26 +62,42 @@ public class OfficeHourController {
 
         if (isValid) {
             OfficeHourEntry newEntry = new OfficeHourEntry(semester, Integer.parseInt(yearText), selectedDays);
-            List<OfficeHourEntry> current = readOfficeHourCSV("data/office_hours.csv");
-            for (OfficeHourEntry existing : current) {
-                if (newEntry.compares(existing)) {
-                    showAlert("Error", "Duplicate semester and year found.");
-                    return;
+
+            try {
+                List<OfficeHourEntry> officeHours = new OfficeHourEntrySort().readAndSort(OFFICEHOUR_FILE);
+                for (OfficeHourEntry existing : officeHours) {
+                    if (newEntry.compares(existing)) {
+                        showAlert("Error", "This office hour entry already exists.");
+                        return;
+                    }
                 }
+                officeHours.add(newEntry);
+                saveOfficeHours(officeHours);
+                showAlert("Success", "Office hour entry successfully added.");
+                MainMenuPage.setActive(stage);
+            } catch (Exception ex) {
+                showAlert("Error", "Failed to save office hour.");
             }
-            current.add(newEntry);
-            addSortedOfficeHourData(current);
-            showAlert("Success", "Office hour entry successfully added.");
-            MainMenuPage.setActive(stage);
         } else {
             showAlert("Error", errorMessage.toString());
         }
     }
 
+    private static void saveOfficeHours(List<OfficeHourEntry> officeHours) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(OFFICEHOUR_FILE, false))) {
+            for (OfficeHourEntry entry : officeHours) {
+                writer.write(entry.toString());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to save office hour entries.", e);
+        }
+    }
+
     private static void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+        javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
         if ("Success".equals(title)) {
-            alert.setAlertType(Alert.AlertType.INFORMATION);
+            alert.setAlertType(javafx.scene.control.Alert.AlertType.INFORMATION);
         }
         alert.setTitle(title);
         alert.setHeaderText(null);

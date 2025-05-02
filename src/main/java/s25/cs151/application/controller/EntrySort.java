@@ -1,8 +1,8 @@
 package s25.cs151.application.controller;
-import s25.cs151.application.model.AppointmentEntry;
-import s25.cs151.application.model.CourseEntry;
-import s25.cs151.application.model.OfficeHourEntry;
-import s25.cs151.application.model.TimeSlotEntry;
+import s25.cs151.application.model.entry.AppointmentEntry;
+import s25.cs151.application.model.entry.CourseEntry;
+import s25.cs151.application.model.entry.OfficeHourEntry;
+import s25.cs151.application.model.entry.TimeSlotEntry;
 
 import java.util.*;
 import java.io.*;

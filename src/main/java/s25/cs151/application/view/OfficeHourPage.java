@@ -1,6 +1,5 @@
 package s25.cs151.application.view;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -13,8 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import s25.cs151.application.controller.OfficeHourController;
-import s25.cs151.application.model.OfficeHourEntry;
-import s25.cs151.application.controller.EntrySort;
+import s25.cs151.application.model.entry.OfficeHourEntry;
 
 import java.util.Arrays;
 import java.util.List;
