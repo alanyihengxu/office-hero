@@ -91,7 +91,7 @@ public class MainMenuPage {
         //Search Appointment Button event on click
         bt5.setOnAction(e-> {
             try {
-                EditPage.setActive(stage);  // Switch to NewScene
+                EditSearchPage.setActive(stage);  // Switch to NewScene
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }

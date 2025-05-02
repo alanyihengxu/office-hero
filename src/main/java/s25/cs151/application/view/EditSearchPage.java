@@ -1,8 +1,5 @@
 package s25.cs151.application.view;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.transformation.SortedList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -14,15 +11,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import s25.cs151.application.controller.DeleteSchedules;
 import s25.cs151.application.controller.EditController;
-import s25.cs151.application.controller.EntrySort;
 import s25.cs151.application.model.AppointmentEntry;
 
 import java.io.IOException;
 
 
-public class EditPage {
+public class EditSearchPage {
     /**
      * This method makes it so a stage that becomes active.
      * This stage houses the search page which allows users to
@@ -91,18 +86,7 @@ public class EditPage {
         tableView.setPrefSize(600, 400);
         root.getChildren().add(tableView);
 
-        //Sort initial appointments
-        SortedList<AppointmentEntry> initialAppointments = new SortedList<>(
-                FXCollections.observableArrayList(EntrySort.readAppointmentCSV("data/appointments.csv"))
-        );
-        initialAppointments.setComparator((appt1, appt2) -> {
-            int dateCompare = appt2.getDate().compareTo(appt1.getDate());
-            if (dateCompare != 0) {
-                return dateCompare;
-            }
-            return appt2.getTimeSlot().compareTo(appt1.getTimeSlot());
-        });
-        tableView.setItems(initialAppointments);
+        EditController.initialTableView(tableView);
 
         Rectangle searchBox = new Rectangle(190, 50);
         searchBox.setFill(Color.ALICEBLUE);
@@ -129,10 +113,10 @@ public class EditPage {
         searchButton.setLayoutY(110);
         root.getChildren().add(searchButton);
 
-        Button deleteButton = new Button("Delete");
-        deleteButton.setLayoutX(560);
-        deleteButton.setLayoutY(110);
-        root.getChildren().add(deleteButton);
+        Button editButton = new Button("Edit");
+        editButton.setLayoutX(560);
+        editButton.setLayoutY(110);
+        root.getChildren().add(editButton);
 
         //Image
         Image logo = new Image("logo.png");
@@ -155,34 +139,12 @@ public class EditPage {
         backButton.setLayoutY(30);
         root.getChildren().add(backButton);
 
-
         //back to home button
-        backButton.setOnAction(e -> {
-            try {
-                MainMenuPage.setActive(stage);  // Switch to NewScene
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-
+        backButton.setOnAction(e -> EditController.mainMenu(stage));
 
         searchButton.setOnAction(e -> EditController.search(name, tableView));
 
-        deleteButton.setOnAction(e -> {
-            AppointmentEntry deleteItem = tableView.getSelectionModel().getSelectedItem();
-            int index = tableView.getSelectionModel().getSelectedIndex();
-            if (deleteItem == null) {
-                EditController.showAlert("Error", "Please select an appointment.");
-                return;
-            } else {
-                DeleteSchedules delete1 = new DeleteSchedules();
-                delete1.deleteSearch("data/appointments.csv",deleteItem);
-                ObservableList<AppointmentEntry> filtered = tableView.getItems().filtered(
-                        appt -> appt != deleteItem
-                );
-                tableView.setItems(filtered);
-            }
-        });
+        editButton.setOnAction(e -> EditController.edit(stage, tableView));
 
         Scene scene = new Scene(root, 1000, 600);
         stage.setScene(scene);
