@@ -139,7 +139,7 @@ public class SearchPage {
         backButton.setLayoutY(30);
         root.getChildren().add(backButton);
 
-        SearchController.attachhandlers(name,tableView,searchButton,backButton, deleteButton, stage);
+        SearchController.attachHandlers(name,tableView,searchButton,backButton, deleteButton, stage);
 
 
         Scene scene = new Scene(root, 1000, 600);
