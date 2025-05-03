@@ -1,4 +1,4 @@
-package s25.cs151.application.model.sort;
+package s25.cs151.application.controller.sort;
 
 import s25.cs151.application.model.entry.TimeSlotEntry;
 

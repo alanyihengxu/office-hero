@@ -14,8 +14,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import s25.cs151.application.controller.AppointmentController;
-import s25.cs151.application.controller.EntrySort;
+import s25.cs151.application.controller.sort.EntrySort;
 import s25.cs151.application.model.entry.AppointmentEntry;
+import s25.cs151.application.controller.sort.AppointmentEntrySort;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -56,6 +57,13 @@ public class AppointmentPage {
         backgroundColor.setFill(Color.KHAKI);
         root.getChildren().add(backgroundColor);
 
+        // Sidebar background
+        Rectangle sidebar = new Rectangle(220, 600);
+        sidebar.setFill(Color.DARKKHAKI);
+        sidebar.setLayoutX(0);
+        sidebar.setLayoutY(0);
+        root.getChildren().add(sidebar);
+
         // Main title
         Text title = new Text("Appointment");
         title.setStyle("-fx-font-size: 48px; -fx-font-weight: bold; -fx-text-fill: black;");
@@ -91,8 +99,9 @@ public class AppointmentPage {
         tableView.getColumns().add(reasonCol);
         tableView.getColumns().add(commentCol);
 
+        EntrySort<AppointmentEntry> reader = new AppointmentEntrySort();
         ObservableList<AppointmentEntry> appointments =
-                FXCollections.observableArrayList(EntrySort.readAppointmentCSV("data/appointments.csv"));
+                FXCollections.observableArrayList(reader.readAndSort("data/appointments.csv"));
         tableView.setItems(appointments);
 
         tableView.setLayoutX(500);

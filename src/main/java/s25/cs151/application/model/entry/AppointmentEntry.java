@@ -28,6 +28,12 @@ public class AppointmentEntry {
         return String.join(",", name, date, timeSlot, course, reason, comment);
     }
 
+
+    @Override
+    public String toString() {
+        return toCSV();
+    }
+
     public static AppointmentEntry fromCSV(String csvLine) {
         String[] parts = csvLine.split(",", -1);
         return new AppointmentEntry(parts[0], parts[1], parts[2], parts[3], parts[4], parts[5]);

@@ -12,8 +12,8 @@ module s25.cs151.application {
     opens s25.cs151.application.controller to javafx.fxml;
     exports s25.cs151.application.view;
     opens s25.cs151.application.view to javafx.fxml;
-    exports s25.cs151.application.model.sort;
-    opens s25.cs151.application.model.sort to javafx.fxml;
+    exports s25.cs151.application.controller.sort;
+    opens s25.cs151.application.controller.sort to javafx.fxml;
     exports s25.cs151.application.model.entry;
     opens s25.cs151.application.model.entry to javafx.fxml;
 }
