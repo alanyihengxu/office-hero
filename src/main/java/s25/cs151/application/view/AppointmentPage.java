@@ -13,88 +13,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import s25.cs151.application.controller.AppointmentController;
 import s25.cs151.application.controller.EntrySort;
 import s25.cs151.application.model.entry.AppointmentEntry;
-import s25.cs151.application.model.entry.CourseEntry;
-import s25.cs151.application.model.entry.OfficeHourEntry;
-import s25.cs151.application.model.entry.TimeSlotEntry;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.util.LinkedList;
-import java.util.List;
-
 
 public class AppointmentPage {
-    /**
-     * This method is a helper method for displaying alerts; the default alert
-     * type is error.
-     *
-     * @param: String title, String message
-     * @return: Void
-     *
-     */
-
-    private static void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-
-        if (title.equals("Success"))
-            alert.setAlertType(Alert.AlertType.INFORMATION);
-
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-
-    private static List<String> loadOfficeHours() {
-        List<String> entries = new LinkedList<>();
-
-        try (BufferedReader reader = new BufferedReader(new FileReader("data/office_hours.csv"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                OfficeHourEntry entry = OfficeHourEntry.fromCSV(line);
-                entries.add(entry.getSemester() + " " + entry.getYear() + ": " + entry.getDays());
-            }
-        } catch(IOException ex) {
-            showAlert("Error", "Failed to load data.");
-        }
-        return entries;
-    }
-
-    private static List<String> loadCourses() {
-        List<String> entries = new LinkedList<>();
-
-        try (BufferedReader reader = new BufferedReader(new FileReader("data/courses.csv"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                CourseEntry entry = CourseEntry.fromCSV(line);
-                entries.add(entry.getCourseCode() + "-" + entry.getSectionNumber());
-            }
-        } catch(IOException ex) {
-            showAlert("Error", "Failed to load data.");
-        }
-        return entries;
-    }
-
-    private static List<String>loadTimeSlots() {
-        List<String> entries = new LinkedList<>();
-
-        try (BufferedReader reader = new BufferedReader(new FileReader("data/semester_time_slots.csv"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                TimeSlotEntry entry = TimeSlotEntry.fromCSV(line);
-                String fromMinute = (entry.getFromMinute() < 10 ? "0" : "") + entry.getFromMinute();
-                String toMinute = (entry.getToMinute() < 10 ? "0" : "") + entry.getToMinute();
-                entries.add(entry.getFromHour() + ":" + fromMinute + " - " + entry.getToHour() + ":" + toMinute);
-            }
-        } catch(IOException ex) {
-            showAlert("Error", "Failed to load data.");
-        }
-        return entries;
-    }
-
     /**
      * This method makes it so a stage that becomes active.
      * This stage houses the appointment page which allows users to
@@ -221,7 +147,7 @@ public class AppointmentPage {
 
         //Time slot selection
         ComboBox<String> timeSlot = new ComboBox<>();
-        timeSlot.getItems().addAll(loadTimeSlots());
+        timeSlot.getItems().addAll(AppointmentController.loadTimeSlots());
         if (!timeSlot.getItems().isEmpty())
             timeSlot.setValue(timeSlot.getItems().get(0));
         timeSlot.setLayoutX(250);
@@ -240,7 +166,7 @@ public class AppointmentPage {
 
         //Time slot selection
         ComboBox<String> course = new ComboBox<>();
-        course.getItems().addAll(loadCourses());
+        course.getItems().addAll(AppointmentController.loadCourses());
         if (!course.getItems().isEmpty())
            course.setValue(course.getItems().get(0));
 
@@ -303,69 +229,11 @@ public class AppointmentPage {
         backButton.setLayoutY(30);
         root.getChildren().add(backButton);
 
-        //Submit button in action + checks for valid inputs
-        submitButton.setOnAction(e -> {
-            boolean isValid = true;
-            String errorMessage = "";
-
-            String studentName = name.getText().trim();
-            if (studentName.isEmpty()) {
-                isValid = false;
-                errorMessage += "Student name is required.\n";
-            }
-
-            String appointmentDate = null;
-            if (date.getValue() == null) {
-                isValid = false;
-                errorMessage += "Date is required.\n";
-            } else {
-                appointmentDate = date.getValue().toString();
-            }
-
-            String selectedTimeSlot = timeSlot.getValue();
-            if (selectedTimeSlot == null) {
-                isValid = false;
-                errorMessage += "Time slot is required.\n";
-            }
-
-            String selectedCourse = course.getValue();
-            if (selectedCourse == null) {
-                isValid = false;
-                errorMessage += "Course is required.\n";
-            }
-
-            String appointmentReason = reason.getText().trim().isEmpty() ? "N/A" : reason.getText().trim();
-            String appointmentComment = comment.getText().trim().isEmpty() ? "N/A" : comment.getText().trim();
-
-            if (isValid) {
-                AppointmentEntry newEntry = new AppointmentEntry(
-                        studentName,
-                        appointmentDate,
-                        selectedTimeSlot,
-                        selectedCourse,
-                        appointmentReason,
-                        appointmentComment
-                );
-
-                // Load, append, and sort appointments
-                List<AppointmentEntry> current = EntrySort.readAppointmentCSV("data/appointments.csv");
-                current.add(newEntry);
-                EntrySort.addSortedAppointmentData(current);
-
-                showAlert("Success", "Appointment successfully submitted.");
-                MainMenuPage.setActive(stage);  // Switch to NewScene
-            } else {
-                showAlert("Error", errorMessage);
-            }
-        });
-
-
-        //back to home button
-        backButton.setOnAction(e -> {
-            MainMenuPage.setActive(stage);  // Switch to NewScene
-        });
+        //Sends all necessary info to AppointmentController
+        AppointmentController.attachHandlers(name, date, timeSlot, course, reason, comment, submitButton, backButton, stage);
 
         Scene scene = new Scene(root, 1000, 600);
         stage.setScene(scene);
+
     }
 }

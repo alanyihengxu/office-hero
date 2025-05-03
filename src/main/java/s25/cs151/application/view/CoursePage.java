@@ -12,6 +12,8 @@ import javafx.stage.Stage;
 import s25.cs151.application.controller.CourseController;
 import s25.cs151.application.model.entry.CourseEntry;
 
+
+
 public class CoursePage {
 
     public static void setActive(Stage stage) {
