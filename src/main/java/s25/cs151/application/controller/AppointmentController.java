@@ -5,8 +5,8 @@ import javafx.stage.Stage;
 import s25.cs151.application.model.entry.AppointmentEntry;
 import s25.cs151.application.model.entry.CourseEntry;
 import s25.cs151.application.model.entry.TimeSlotEntry;
-import s25.cs151.application.model.sort.AppointmentEntrySort;
-import s25.cs151.application.model.sort.EntrySort;
+import s25.cs151.application.controller.sort.AppointmentEntrySort;
+import s25.cs151.application.controller.sort.EntrySort;
 import s25.cs151.application.view.MainMenuPage;
 
 import java.io.*;

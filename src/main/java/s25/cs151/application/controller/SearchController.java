@@ -8,9 +8,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import s25.cs151.application.model.sort.EntrySort;
+import s25.cs151.application.controller.sort.EntrySort;
 import s25.cs151.application.model.entry.AppointmentEntry;
-import s25.cs151.application.model.sort.AppointmentEntrySort;
+import s25.cs151.application.controller.sort.AppointmentEntrySort;
 import s25.cs151.application.view.MainMenuPage;
 
 import java.io.BufferedWriter;
