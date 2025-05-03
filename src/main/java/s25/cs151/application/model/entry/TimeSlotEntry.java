@@ -1,4 +1,4 @@
-package s25.cs151.application.model;
+package s25.cs151.application.model.entry;
 
 public class TimeSlotEntry {
     private int fromHour;

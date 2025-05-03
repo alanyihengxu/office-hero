@@ -1,253 +1,131 @@
 package s25.cs151.application.view;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import s25.cs151.application.controller.EntrySort;
-import s25.cs151.application.model.TimeSlotEntry;
-
-
-import java.io.*;
-
+import s25.cs151.application.controller.TimeSlotController;
+import s25.cs151.application.model.entry.TimeSlotEntry;
 
 public class TimeSlotPage {
-    /**
-     * This method is a helper method for displaying alerts; the default alert
-     * type is error.
-     *
-     * @param: String title, String message
-     * @return: Void
-     *
-     */
 
-    private static void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-
-        if (title.equals("Success"))
-            alert.setAlertType(Alert.AlertType.INFORMATION);
-
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    /**
-     * This method saves a user's time slot entry into a flat file.
-     *
-     * @param: TimeSlotEntry entry
-     * @return: Void
-     */
-    private static void saveTimeSlotToFile(TimeSlotEntry entry) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("data/semester_time_slots.csv", true))) {
-            writer.write(entry.toString());
-            writer.newLine();
-        }
-    }
-
-    /**
-     * This method makes it so a stage that becomes active.
-     * This stage allows user to pick a selected start time
-     * and end time for their office hours then displays it on the table
-     *
-     * @param: Stage (stage object)
-     * @return: Void
-     *
-     */
-
-    public static void setActive(Stage stage) throws IOException {
+    public static void setActive(Stage stage) {
         Pane root = new Pane();
-        StackPane stackPane = new StackPane();
-        StackPane stackPane2 = new StackPane();
-        //StackPane stackPane3 = new StackPane();
 
-        //Background color
-        Rectangle backgroundColor = new Rectangle(1000, 600);
-        backgroundColor.setFill(Color.KHAKI);
-        root.getChildren().add(backgroundColor);
+        // Main background
+        Rectangle background = new Rectangle(1000, 600);
+        background.setFill(Color.KHAKI);
+        root.getChildren().add(background);
 
-        Rectangle blueRectangle = new Rectangle(220, 600);
-        blueRectangle.setFill(Color.DARKKHAKI);
+        // Sidebar background
+        Rectangle sidebar = new Rectangle(220, 600);
+        sidebar.setFill(Color.DARKKHAKI);
+        root.getChildren().add(sidebar);
 
-        blueRectangle.setLayoutX(0);
-        blueRectangle.setLayoutY(0);
-
-        // Add the blue rectangle to the root
-        root.getChildren().add(blueRectangle);
-
-
-        // Main title
+        // Title
         Text title = new Text("Semester Time Slots");
-        title.setStyle("-fx-font-size: 48px; -fx-font-weight: bold; -fx-text-fill: black;");
+        title.setStyle("-fx-font-size: 48px; -fx-font-weight: bold;");
         title.setLayoutX(250);
         title.setLayoutY(60);
         root.getChildren().add(title);
 
-        //Display in TableView
+        // TableView
         TableView<TimeSlotEntry> tableView = new TableView<>();
-
-        TableColumn<TimeSlotEntry, String> fromTimeColumn = new TableColumn<>("From Time:");
-        fromTimeColumn.setCellValueFactory(cellData -> {
-            TimeSlotEntry entry = cellData.getValue();
-            String formatted = String.format("%02d:%02d", entry.getFromHour(), entry.getFromMinute());
-            return new ReadOnlyStringWrapper(formatted);
-        });
-
-        TableColumn<TimeSlotEntry, String> toTimeColumn = new TableColumn<>("To Time:");
-        toTimeColumn.setCellValueFactory(cellData -> {
-            TimeSlotEntry entry = cellData.getValue();
-            String formatted = String.format("%02d:%02d", entry.getToHour(), entry.getToMinute());
-            return new ReadOnlyStringWrapper(formatted);
-        });
-
-        tableView.getColumns().add(fromTimeColumn);
-        tableView.getColumns().add(toTimeColumn);
-
-        ObservableList<TimeSlotEntry> timeSlotEntries =
-                FXCollections.observableArrayList(EntrySort.readTimeSlotCSV("data/semester_time_slots.csv"));
-        tableView.setItems(timeSlotEntries);
-
         tableView.setLayoutX(500);
         tableView.setLayoutY(80);
-        tableView.setPrefSize(500, 250);
+        tableView.setPrefSize(450, 250);
+
+        TableColumn<TimeSlotEntry, String> fromTimeCol = new TableColumn<>("From Time");
+        fromTimeCol.setCellValueFactory(cellData -> {
+            TimeSlotEntry entry = cellData.getValue();
+            return new javafx.beans.property.ReadOnlyStringWrapper(
+                    String.format("%02d:%02d", entry.getFromHour(), entry.getFromMinute())
+            );
+        });
+
+        TableColumn<TimeSlotEntry, String> toTimeCol = new TableColumn<>("To Time");
+        toTimeCol.setCellValueFactory(cellData -> {
+            TimeSlotEntry entry = cellData.getValue();
+            return new javafx.beans.property.ReadOnlyStringWrapper(
+                    String.format("%02d:%02d", entry.getToHour(), entry.getToMinute())
+            );
+        });
+
+        tableView.getColumns().addAll(fromTimeCol, toTimeCol);
+
+        tableView.setItems(TimeSlotController.loadTimeSlots());
         root.getChildren().add(tableView);
 
+        // Form Fields
+        Rectangle fromLabelBox = new Rectangle(190, 50);
+        fromLabelBox.setFill(Color.ALICEBLUE);
+        StackPane fromPane = new StackPane(fromLabelBox, new Text("From Hour:"));
+        fromPane.setLayoutX(15);
+        fromPane.setLayoutY(120);
+        root.getChildren().add(fromPane);
 
-        Rectangle semesterBox = new Rectangle(190, 50);
-        semesterBox.setFill(Color.ALICEBLUE);
+        Spinner<Integer> fromHour = new Spinner<>(0, 23, 9);
+        Spinner<Integer> fromMinute = new Spinner<>(0, 45, 0, 15);
+        fromHour.setPrefWidth(80);
+        fromMinute.setPrefWidth(80);
+        fromHour.setLayoutX(250);
+        fromHour.setLayoutY(130);
+        fromMinute.setLayoutX(350);
+        fromMinute.setLayoutY(130);
+        root.getChildren().addAll(fromHour, fromMinute);
 
-        Text semesterLabel = new Text("From Hour:");
-        semesterLabel.setStyle("-fx-font-size: 16px;");
-        stackPane.getChildren().addAll(semesterBox, semesterLabel);
-        stackPane.setLayoutX(15);
-        stackPane.setLayoutY(120);
+        Rectangle toLabelBox = new Rectangle(190, 50);
+        toLabelBox.setFill(Color.ALICEBLUE);
+        StackPane toPane = new StackPane(toLabelBox, new Text("To Hour:"));
+        toPane.setLayoutX(15);
+        toPane.setLayoutY(270);
+        root.getChildren().add(toPane);
 
-        //Semester selection
-        HBox timeSelect1 = new HBox();
+        Spinner<Integer> toHour = new Spinner<>(0, 23, 10);
+        Spinner<Integer> toMinute = new Spinner<>(0, 45, 0, 15);
+        toHour.setPrefWidth(80);
+        toMinute.setPrefWidth(80);
+        toHour.setLayoutX(250);
+        toHour.setLayoutY(280);
+        toMinute.setLayoutX(350);
+        toMinute.setLayoutY(280);
+        root.getChildren().addAll(toHour, toMinute);
 
-        Spinner<Integer> hourSelect1 = new Spinner<>(0, 23, 12);
-        hourSelect1.setPrefWidth(120);
-        hourSelect1.setEditable(false);
-
-        Spinner<Integer> minuteSelect1 = new Spinner<>(0, 45, 0, 15);
-        minuteSelect1.setEditable(false);
-        minuteSelect1.setPrefWidth(120);
-
-        //Adding to Hbox
-        timeSelect1.getChildren().addAll(hourSelect1,minuteSelect1);
-        timeSelect1.setLayoutX(250);
-        timeSelect1.setLayoutY(130);
-
-
-        HBox timeSelect2 = new HBox();
-
-        Spinner<Integer> hourSelect2 = new Spinner<>(0, 23, 12);
-        hourSelect2.setPrefWidth(120);
-        hourSelect2.setEditable(false);
-
-        Spinner<Integer> minuteSelect2 = new Spinner<>(0, 45, 15, 15);
-        minuteSelect2.setEditable(false);
-        minuteSelect2.setPrefWidth(120);
-
-        //Adding to Hbox
-        timeSelect2.getChildren().addAll(hourSelect2,minuteSelect2);
-        timeSelect2.setLayoutX(250);
-        timeSelect2.setLayoutY(280);
-
-        Rectangle yearBox = new Rectangle(190, 50);
-        yearBox.setFill(Color.ALICEBLUE);
-
-        Text yearLabel = new Text("To Hour:");
-        yearLabel.setStyle("-fx-font-size: 16px;");
-        stackPane2.getChildren().addAll(yearBox, yearLabel);
-        stackPane2.setLayoutX(15);
-        stackPane2.setLayoutY(270);
-
-        //Image
-        Image logo = new Image("logo.png");
-        ImageView imageView1 = new ImageView(logo);
-        imageView1.setLayoutX(700);
-        imageView1.setLayoutY(380);
-        imageView1.setFitWidth(200);
-        imageView1.setFitHeight(200);
-
-        Text logoText = new Text("Office Hero");
-        logoText.setStyle("-fx-font-size: 36px;-fx-font-style: italic;");
-        logoText.setLayoutX(730);
-        logoText.setLayoutY(370);
-
-        //Submit button
+        // Buttons
         Button submitButton = new Button("Submit");
         submitButton.setLayoutX(250);
-        submitButton.setLayoutY(570);
+        submitButton.setLayoutY(370);
 
-        //Back to home page button
         Button backButton = new Button("Back to Home Page");
         backButton.setLayoutX(30);
         backButton.setLayoutY(30);
 
-        //adding all the visual elements to the pane
-        root.getChildren().add(stackPane);
-        root.getChildren().add(stackPane2);
-        root.getChildren().add(timeSelect1);
-        root.getChildren().add(timeSelect2);
-        root.getChildren().add(imageView1);
-        root.getChildren().add(logoText);
-        root.getChildren().add(submitButton);
-        root.getChildren().add(backButton);
+        root.getChildren().addAll(submitButton, backButton);
 
-        //Submit button in action + checks for valid inputs
-        submitButton.setOnAction(e -> {
-            boolean isValid = true;
-            String errorMessage = "";
+        // Logo
+        Image logo = new Image("logo.png");
+        ImageView logoView = new ImageView(logo);
+        logoView.setLayoutX(700);
+        logoView.setLayoutY(380);
+        logoView.setFitWidth(200);
+        logoView.setFitHeight(200);
 
-            int fromHour = hourSelect1.getValue();
-            int fromMinute = minuteSelect1.getValue();
-            int toHour = hourSelect2.getValue();
-            int toMinute = minuteSelect2.getValue();
+        Text logoText = new Text("Office Hero");
+        logoText.setStyle("-fx-font-size: 36px; -fx-font-style: italic;");
+        logoText.setLayoutX(730);
+        logoText.setLayoutY(370);
 
-            // Validation: ensure end time is after start time
-            if (toHour < fromHour || (toHour == fromHour && toMinute <= fromMinute)) {
-                isValid = false;
-                errorMessage += "End time must be after start time.\n";
-            }
+        root.getChildren().addAll(logoView, logoText);
 
-            if (isValid) {
-                TimeSlotEntry newEntry = new TimeSlotEntry(fromHour, fromMinute, toHour, toMinute);
+        // Attach functionality
+        TimeSlotController.attachHandlers(stage, fromHour, fromMinute, toHour, toMinute, submitButton, backButton);
 
-                try {
-                    saveTimeSlotToFile(newEntry);
-                    EntrySort.addSortedTimeSlotData(EntrySort.readTimeSlotCSV("data/semester_time_slots.csv"));
-                    showAlert("Success", "Time slot entry successfully added.");
-                    TimeSlotPage.setActive(stage); // Reload page
-                } catch (IOException ex) {
-                    showAlert("Error", "Failed to save data.");
-                }
-            } else {
-                showAlert("Error", errorMessage);
-            }
-        });
-
-
-        backButton.setOnAction(e -> {
-            try {
-                MainMenuPage.setActive(stage);  // Switch to NewScene
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-
+        // Scene setup
         Scene scene = new Scene(root, 1000, 600);
         stage.setScene(scene);
     }

@@ -14,10 +14,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import s25.cs151.application.controller.EntrySort;
-import s25.cs151.application.model.AppointmentEntry;
-import s25.cs151.application.model.CourseEntry;
-import s25.cs151.application.model.OfficeHourEntry;
-import s25.cs151.application.model.TimeSlotEntry;
+import s25.cs151.application.model.entry.AppointmentEntry;
+import s25.cs151.application.model.entry.CourseEntry;
+import s25.cs151.application.model.entry.OfficeHourEntry;
+import s25.cs151.application.model.entry.TimeSlotEntry;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -347,17 +347,13 @@ public class AppointmentPage {
                         appointmentComment
                 );
 
-                try {
-                    // Load, append, and sort appointments
-                    List<AppointmentEntry> current = EntrySort.readAppointmentCSV("data/appointments.csv");
-                    current.add(newEntry);
-                    EntrySort.addSortedAppointmentData(current);
+                // Load, append, and sort appointments
+                List<AppointmentEntry> current = EntrySort.readAppointmentCSV("data/appointments.csv");
+                current.add(newEntry);
+                EntrySort.addSortedAppointmentData(current);
 
-                    showAlert("Success", "Appointment successfully submitted.");
-                    MainMenuPage.setActive(stage);  // Switch to NewScene
-                } catch (IOException ex) {
-                    showAlert("Error", "Failed to save appointment.");
-                }
+                showAlert("Success", "Appointment successfully submitted.");
+                MainMenuPage.setActive(stage);  // Switch to NewScene
             } else {
                 showAlert("Error", errorMessage);
             }
@@ -366,11 +362,7 @@ public class AppointmentPage {
 
         //back to home button
         backButton.setOnAction(e -> {
-            try {
-                MainMenuPage.setActive(stage);  // Switch to NewScene
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
+            MainMenuPage.setActive(stage);  // Switch to NewScene
         });
 
         Scene scene = new Scene(root, 1000, 600);

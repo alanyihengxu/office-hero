@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 import javafx.collections.transformation.SortedList;
 import s25.cs151.application.controller.DeleteSchedules;
 import s25.cs151.application.controller.EntrySort;
-import s25.cs151.application.model.AppointmentEntry;
+import s25.cs151.application.model.entry.AppointmentEntry;
 
 import java.io.IOException;
 
@@ -165,11 +165,7 @@ public class SearchPage {
 
         //back to home button
         backButton.setOnAction(e -> {
-            try {
-                MainMenuPage.setActive(stage);  // Switch to NewScene
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
+            MainMenuPage.setActive(stage);  // Switch to NewScene
         });
 
 

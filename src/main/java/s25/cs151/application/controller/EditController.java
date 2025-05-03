@@ -5,10 +5,10 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import s25.cs151.application.model.AppointmentEntry;
-import s25.cs151.application.model.CourseEntry;
-import s25.cs151.application.model.OfficeHourEntry;
-import s25.cs151.application.model.TimeSlotEntry;
+import s25.cs151.application.model.entry.AppointmentEntry;
+import s25.cs151.application.model.entry.CourseEntry;
+import s25.cs151.application.model.entry.OfficeHourEntry;
+import s25.cs151.application.model.entry.TimeSlotEntry;
 import s25.cs151.application.view.EditAppointmentPage;
 import s25.cs151.application.view.EditSearchPage;
 import s25.cs151.application.view.MainMenuPage;
@@ -98,11 +98,7 @@ public class EditController {
 
     // Return to Main Menu
     public static void mainMenu(Stage stage) {
-        try {
-            MainMenuPage.setActive(stage);  // Switch to NewScene
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+        MainMenuPage.setActive(stage);  // Switch to NewScene
     }
 
     //Sort initial appointments
