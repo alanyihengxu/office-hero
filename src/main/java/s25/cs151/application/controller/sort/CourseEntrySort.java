@@ -1,6 +1,6 @@
 package s25.cs151.application.controller.sort;
 
-import s25.cs151.application.model.entry.CourseEntry;
+import s25.cs151.application.model.CourseEntry;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

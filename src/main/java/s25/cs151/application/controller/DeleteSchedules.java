@@ -1,6 +1,6 @@
 package s25.cs151.application.controller;
 
-import s25.cs151.application.model.entry.AppointmentEntry;
+import s25.cs151.application.model.AppointmentEntry;
 
 import javax.swing.*;
 import java.io.*;

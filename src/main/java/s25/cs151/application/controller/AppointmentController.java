@@ -2,9 +2,9 @@ package s25.cs151.application.controller;
 
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import s25.cs151.application.model.entry.AppointmentEntry;
-import s25.cs151.application.model.entry.CourseEntry;
-import s25.cs151.application.model.entry.TimeSlotEntry;
+import s25.cs151.application.model.AppointmentEntry;
+import s25.cs151.application.model.CourseEntry;
+import s25.cs151.application.model.TimeSlotEntry;
 import s25.cs151.application.controller.sort.AppointmentEntrySort;
 import s25.cs151.application.controller.sort.EntrySort;
 import s25.cs151.application.view.MainMenuPage;

@@ -15,7 +15,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import s25.cs151.application.controller.AppointmentController;
 import s25.cs151.application.controller.sort.EntrySort;
-import s25.cs151.application.model.entry.AppointmentEntry;
+import s25.cs151.application.model.AppointmentEntry;
 import s25.cs151.application.controller.sort.AppointmentEntrySort;
 
 import java.io.*;

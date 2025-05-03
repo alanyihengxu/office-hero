@@ -10,7 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import s25.cs151.application.controller.TimeSlotController;
-import s25.cs151.application.model.entry.TimeSlotEntry;
+import s25.cs151.application.model.TimeSlotEntry;
 
 public class TimeSlotPage {
 

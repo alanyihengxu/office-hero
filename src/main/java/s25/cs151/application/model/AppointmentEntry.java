@@ -1,4 +1,4 @@
-package s25.cs151.application.model.entry;
+package s25.cs151.application.model;
 
 public class AppointmentEntry {
     private String name;

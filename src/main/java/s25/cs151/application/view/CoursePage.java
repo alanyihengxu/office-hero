@@ -10,7 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import s25.cs151.application.controller.CourseController;
-import s25.cs151.application.model.entry.CourseEntry;
+import s25.cs151.application.model.CourseEntry;
 
 
 

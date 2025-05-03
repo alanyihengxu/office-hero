@@ -12,7 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import s25.cs151.application.controller.OfficeHourController;
-import s25.cs151.application.model.entry.OfficeHourEntry;
+import s25.cs151.application.model.OfficeHourEntry;
 
 import java.util.Arrays;
 import java.util.List;

@@ -5,7 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import s25.cs151.application.controller.sort.EntrySort;
-import s25.cs151.application.model.entry.OfficeHourEntry;
+import s25.cs151.application.model.OfficeHourEntry;
 import s25.cs151.application.controller.sort.OfficeHourEntrySort;
 import s25.cs151.application.view.MainMenuPage;
 

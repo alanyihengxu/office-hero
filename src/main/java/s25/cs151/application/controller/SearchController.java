@@ -9,7 +9,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import s25.cs151.application.controller.sort.EntrySort;
-import s25.cs151.application.model.entry.AppointmentEntry;
+import s25.cs151.application.model.AppointmentEntry;
 import s25.cs151.application.controller.sort.AppointmentEntrySort;
 import s25.cs151.application.view.MainMenuPage;
 
@@ -83,11 +83,10 @@ public class SearchController {
         }
 
         try {
-            List<AppointmentEntry> appointments = loadAppointments();
-            appointments.removeIf(appt -> appt.equals(deleteItem));
-            saveAppointments(appointments);
+            DeleteSchedules delete = new DeleteSchedules();
+            delete.deleteSearch(APPOINTMENT_FILE, deleteItem);
 
-            ObservableList<AppointmentEntry> filtered = FXCollections.observableArrayList(appointments);
+            ObservableList<AppointmentEntry> filtered = tableView.getItems().filtered(appt -> appt != deleteItem);
             tableView.setItems(filtered);
 
             showAlert("Success", "Appointment successfully deleted.");

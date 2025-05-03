@@ -6,7 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.stage.Stage;
 import s25.cs151.application.controller.sort.EntrySort;
-import s25.cs151.application.model.entry.TimeSlotEntry;
+import s25.cs151.application.model.TimeSlotEntry;
 import s25.cs151.application.controller.sort.TimeSlotEntrySort;
 import s25.cs151.application.view.MainMenuPage;
 

@@ -13,7 +13,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import s25.cs151.application.controller.SearchController;
-import s25.cs151.application.model.entry.AppointmentEntry;
+import s25.cs151.application.model.AppointmentEntry;
 
 import java.io.IOException;
 

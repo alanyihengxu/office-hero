@@ -1,7 +1,7 @@
 package s25.cs151.application.controller.sort;
 
-import s25.cs151.application.model.entry.AppointmentEntry;
-import s25.cs151.application.model.entry.TimeSlotEntry;
+import s25.cs151.application.model.AppointmentEntry;
+import s25.cs151.application.model.TimeSlotEntry;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

@@ -5,7 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import s25.cs151.application.model.entry.CourseEntry;
+import s25.cs151.application.model.CourseEntry;
 import s25.cs151.application.controller.sort.CourseEntrySort;
 import s25.cs151.application.controller.sort.EntrySort;
 import s25.cs151.application.view.MainMenuPage;
